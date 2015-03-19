@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upos.ServiceObject", "Upos.ServiceObject\Upos.ServiceObject.csproj", "{FA35D58E-5D10-4C66-9205-E4C48FC345A5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upos.ServiceObject.Tests", "Upos.ServiceObject.Tests\Upos.ServiceObject.Tests.csproj", "{A83AF042-2C5C-4780-952A-11D2CCAB16B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FA35D58E-5D10-4C66-9205-E4C48FC345A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FA35D58E-5D10-4C66-9205-E4C48FC345A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FA35D58E-5D10-4C66-9205-E4C48FC345A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A83AF042-2C5C-4780-952A-11D2CCAB16B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A83AF042-2C5C-4780-952A-11D2CCAB16B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A83AF042-2C5C-4780-952A-11D2CCAB16B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A83AF042-2C5C-4780-952A-11D2CCAB16B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

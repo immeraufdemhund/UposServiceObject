@@ -40,6 +40,8 @@
   <ItemGroup>
     <Compile Include="Base\IUposBase.cs" />
     <Compile Include="Base\Properties\IUposProperties.cs" />
+    <Compile Include="Base\Properties\PropertyConstants.cs" />
+    <Compile Include="Base\ResultCodeConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
