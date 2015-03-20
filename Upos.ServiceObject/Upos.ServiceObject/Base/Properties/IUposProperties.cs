@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using Upos.ServiceObject.Base.Properties.Validators;
 
 namespace Upos.ServiceObject.Base.Properties
 {
@@ -14,61 +15,15 @@ namespace Upos.ServiceObject.Base.Properties
     {
         IUposBase ServiceObject { get; }
 
+        void AddProperty(int propertyValue, object value);
+
         int GetIntProperty(int propertyIndex);
         void SetIntProperty(int propertyIndex, int propertyValue);
 
         string GetStringProperty(int propertyIndex);
         void SetStringProperty(int propertyIndex, string propertyValue);
+
+        void SetPropertyValidator(int propertyIndex, IPropertyValidator validatorFunc);
+        void SetPropertyValidator(int propertyIndex, Func<object, bool> validatorFunc);
     }
-
-    internal class UposBaseProperties : IUposProperties
-    {
-        private readonly Dictionary<int, object> propDictionary;
-
-        public UposBaseProperties()
-            : this(new Dictionary<int, object>())
-        {
-            propDictionary.Add(PropertyConstants.PIDX_ResultCode, 0);
-        }
-
-        public UposBaseProperties(Dictionary<int, object> propDictionary)
-        {
-            this.propDictionary = propDictionary;
-        }
-
-        public IUposBase ServiceObject
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public int GetIntProperty(int propertyIndex)
-        {
-            if (propDictionary.ContainsKey(propertyIndex))
-                return (int)propDictionary[propertyIndex];
-
-            SetIntProperty(PropertyConstants.PIDX_ResultCode, (int)ResultCodeConstants.OPOS_E_FAILURE);
-            return -1;
-        }
-
-        public void SetIntProperty(int propertyIndex, int propertyValue)
-        {
-            SetProperty(propertyIndex, propertyValue);
-        }
-
-        public string GetStringProperty(int propertyIndex)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void SetStringProperty(int propertyIndex, string propertyValue)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void SetProperty(int propertyIndex, object propertyValue)
-        {
-            propDictionary[propertyIndex] = propertyValue;
-        }
-    }
-
 }
