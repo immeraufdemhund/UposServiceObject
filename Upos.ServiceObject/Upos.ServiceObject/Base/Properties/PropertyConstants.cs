@@ -41,5 +41,10 @@ namespace Upos.ServiceObject.Base.Properties
         //      Added for Release 1.9:
         public const LONG PIDX_CapCompareFirmwareVersion = 504 + PIDX_NUMBER;
         public const LONG PIDX_CapUpdateFirmware = 505 + PIDX_NUMBER;
+
+        public const LONG PIDX_CheckHealthText = 1 + PIDX_STRING;
+        public const LONG PIDX_DeviceDescription = 2 + PIDX_STRING;
+        public const LONG PIDX_DeviceName = 3 + PIDX_STRING;
+        public const LONG PIDX_ServiceObjectDescription = 4 + PIDX_STRING;
     }
 }

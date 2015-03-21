@@ -5,6 +5,8 @@ namespace Upos.ServiceObject.Base.Properties
 {
     public interface IUposProperty
     {
+        string Name { get; set; }
+
         object Value { get; set; }
 
         Func<object, bool> Validator { get; set; }
@@ -12,6 +14,11 @@ namespace Upos.ServiceObject.Base.Properties
 
     public class UposProperty : IUposProperty
     {
+        /// <summary>
+        /// The Property Name as it is known in the Upos Document
+        /// </summary>
+        public string Name { get; set; }
+
         /// <summary>
         /// The value of the property.
         /// </summary>
@@ -23,17 +30,23 @@ namespace Upos.ServiceObject.Base.Properties
         public Func<object, bool> Validator { get; set; }
 
         public UposProperty()
-            : this(new AlwaysValidPropertyValidator(), null)
+            : this("", new AlwaysValidPropertyValidator(), null)
         {
         }
 
         public UposProperty(object defaultValue)
-            : this(new AlwaysValidPropertyValidator(), defaultValue)
+            : this("", new AlwaysValidPropertyValidator(), defaultValue)
         {
         }
 
-        public UposProperty(IPropertyValidator validator, object defaultValue)
+        public UposProperty(string name, object defaultValue)
+            : this(name, new AlwaysValidPropertyValidator(), defaultValue)
         {
+        }
+
+        public UposProperty(string name, IPropertyValidator validator, object defaultValue)
+        {
+            Name = name;
             Validator = validator.Validate;
             Value = defaultValue;
         }

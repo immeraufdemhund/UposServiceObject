@@ -1,33 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Upos.ServiceObject.Base.Properties.Validators;
 
 namespace Upos.ServiceObject.Base.Properties
 {
     internal class UposBaseProperties : IUposProperties
     {
-        private readonly Dictionary<int, IUposProperty> propDictionary;
+        private readonly Dictionary<int, IUposProperty> _propDictionary;
+        private readonly IUposBase _uposBase;
+        private readonly INamedUposBaseProperties _propertiesByName;
 
-        public UposBaseProperties()
-            : this(new Dictionary<int, IUposProperty>())
+        public UposBaseProperties(IUposBase uposBase)
+            : this(new Dictionary<int, IUposProperty>(), uposBase)
         {
-            AddProperty(PropertyConstants.PIDX_ResultCode, ResultCodeConstants.Closed);
-            AddProperty(PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }
 
-        public UposBaseProperties(Dictionary<int, IUposProperty> propDictionary)
+        public UposBaseProperties(Dictionary<int, IUposProperty> propDictionary, IUposBase uposBase)
         {
-            this.propDictionary = propDictionary;
+            _propDictionary = propDictionary;
+            _uposBase = uposBase;
+            _propertiesByName = new NamedUposBaseProperties(this);
+
+            AddProperty("AutoDisable", PropertyConstants.PIDX_AutoDisable, 0);
+            AddProperty("ResultCode", PropertyConstants.PIDX_ResultCode, ResultCodeConstants.Closed);
+            AddProperty("State", PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }
 
-        public IUposBase ServiceObject
-        {
-            get { throw new System.NotImplementedException(); }
-        }
+        public IUposBase ServiceObject { get { return _uposBase; } }
+
+        public INamedUposBaseProperties ByName { get { return _propertiesByName; } }
 
         public int GetIntProperty(int propertyIndex)
         {
-            return (int)propDictionary[propertyIndex].Value;
+            return (int)_propDictionary[propertyIndex].Value;
         }
 
         public void SetIntProperty(int propertyIndex, int propertyValue)
@@ -37,7 +43,7 @@ namespace Upos.ServiceObject.Base.Properties
 
         public string GetStringProperty(int propertyIndex)
         {
-            return (string)propDictionary[propertyIndex].Value;
+            return (string)_propDictionary[propertyIndex].Value;
         }
 
         public void SetStringProperty(int propertyIndex, string propertyValue)
@@ -47,31 +53,45 @@ namespace Upos.ServiceObject.Base.Properties
 
         public void SetPropertyValidator(int propertyIndex, IPropertyValidator validatorFunc)
         {
-            propDictionary[propertyIndex].Validator = validatorFunc.Validate;
+            _propDictionary[propertyIndex].Validator = validatorFunc.Validate;
         }
 
         public void SetPropertyValidator(int propertyIndex, Func<object, bool> validatorFunc)
         {
-            propDictionary[propertyIndex].Validator = validatorFunc;
+            _propDictionary[propertyIndex].Validator = validatorFunc;
         }
 
-        public void AddProperty(int propertyValue, object value)
+        public void AddProperty(string name, int propertyValue, object value)
         {
-            propDictionary.Add(propertyValue, new UposProperty(value));
+            _propDictionary.Add(propertyValue, new UposProperty(name, value));
             SetProperty(propertyValue, value);
         }
 
         private void SetProperty(int propertyIndex, object propertyValue)
         {
-            if (propDictionary[propertyIndex].Validator(propertyValue))
-                propDictionary[propertyIndex].Value = propertyValue;
+            if (_propDictionary[propertyIndex].Validator(propertyValue))
+            {
+                _propDictionary[propertyIndex].Value = propertyValue;
+                FirePropertyChanged(_propDictionary[propertyIndex].Name);
+            }
             else
+            {
                 SetResultCode(ResultCodeConstants.Illegal);
+
+            }
         }
 
         private void SetResultCode(ResultCodeConstants resultCode)
         {
-            propDictionary[PropertyConstants.PIDX_ResultCode].Value = resultCode;
+            _propDictionary[PropertyConstants.PIDX_ResultCode].Value = resultCode;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void FirePropertyChanged(string name)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(name));
         }
     }
 }
