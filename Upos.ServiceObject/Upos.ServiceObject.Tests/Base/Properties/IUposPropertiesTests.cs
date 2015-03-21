@@ -16,9 +16,9 @@ namespace Upos.ServiceObject.Base.Properties
         [SetUp]
         public void Setup()
         {
-            _props = IUposPropertiesFactory.Create();
-            _props.AddProperty(FakeIntPropertyIndex, FakeIntPropertyValue);
-            _props.AddProperty(FakeStringPropertyIndex, FakeStringPropertyValue);
+            _props = IUposPropertiesFactory.Create(null);
+            _props.AddProperty("FakePropertyInt", FakeIntPropertyIndex, FakeIntPropertyValue);
+            _props.AddProperty("FakePropertyString", FakeStringPropertyIndex, FakeStringPropertyValue);
         }
 
         [Test]
@@ -69,6 +69,15 @@ namespace Upos.ServiceObject.Base.Properties
                 .Should()
                 .Be((int)ResultCodeConstants.Illegal,
                     "because when setting an illegal value to a property, the result code is set to Illegal");
+        }
+
+        [Test]
+        public void WhenSettingValue_PropertyChangedEvent_IsFired()
+        {
+            _props.MonitorEvents();
+            _props.ByName.AutoDisable = true;
+
+            _props.ShouldRaisePropertyChangeFor(x => x.ByName.AutoDisable);
         }
     }
 }
