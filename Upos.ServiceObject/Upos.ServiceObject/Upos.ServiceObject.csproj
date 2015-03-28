@@ -38,6 +38,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ErrorLocusConstants.cs" />
+    <Compile Include="Base\ErrorResponseConstants.cs" />
     <Compile Include="Base\IUposBase.cs" />
     <Compile Include="Base\Properties\INamedUposBaseProperties.cs" />
     <Compile Include="Base\Properties\IUposProperties.cs" />
@@ -48,6 +50,7 @@
     <Compile Include="Base\Properties\Validators\IPropertyValidator.cs" />
     <Compile Include="Base\ResultCodeConstants.cs" />
     <Compile Include="Base\ServiceStateConstants.cs" />
+    <Compile Include="Base\StatusUpdateEventConstants.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
