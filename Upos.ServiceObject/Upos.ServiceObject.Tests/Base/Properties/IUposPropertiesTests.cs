@@ -135,20 +135,20 @@ namespace Upos.ServiceObject.Base.Properties
             CompareSetValue(() => _props.ByName.CapStatisticsReporting, (x) => _props.ByName.CapStatisticsReporting = x, false, true, "CapStatisticsReporting");
             CompareSetValue(() => _props.ByName.CapUpdateFirmware, (x) => _props.ByName.CapUpdateFirmware = x, false, true, "CapUpdateFirmware");
             CompareSetValue(() => _props.ByName.CapUpdateStatistics, (x) => _props.ByName.CapUpdateStatistics = x, false, true, "CapUpdateStatistics");
-            CompareSetValue(() => _props.ByName.CheckHealthText, (x) => _props.ByName.CheckHealthText = x, "", "42", "CheckHealthText");
+            CompareSetValue(() => _props.ByName.CheckHealthText, (x) => _props.ByName.CheckHealthText = x, "[Error]", "42", "CheckHealthText");
             CompareSetValue(() => _props.ByName.Claimed, (x) => _props.ByName.Claimed = x, false, true, "Claimed");
             CompareSetValue(() => _props.ByName.DataCount, (x) => _props.ByName.DataCount = x, 0, 42, "DataCount");
             CompareSetValue(() => _props.ByName.DataEventEnabled, (x) => _props.ByName.DataEventEnabled = x, false, true, "DataEventEnabled");
-            CompareSetValue(() => _props.ByName.DeviceDescription, (x) => _props.ByName.DeviceDescription = x, "", "42", "DeviceDescription");
+            CompareSetValue(() => _props.ByName.DeviceDescription, (x) => _props.ByName.DeviceDescription = x, "[Error]", "42", "DeviceDescription");
             CompareSetValue(() => _props.ByName.DeviceEnabled, (x) => _props.ByName.DeviceEnabled = x, false, true, "DeviceEnabled");
-            CompareSetValue(() => _props.ByName.DeviceName, (x) => _props.ByName.DeviceName = x, "", "42", "DeviceName");
+            CompareSetValue(() => _props.ByName.DeviceName, (x) => _props.ByName.DeviceName = x, "[Error]", "42", "DeviceName");
             CompareSetValue(() => _props.ByName.FreezeEvents, (x) => _props.ByName.FreezeEvents = x, false, true, "FreezeEvents");
             CompareSetValue(() => _props.ByName.OutputID, (x) => _props.ByName.OutputID = x, 0, 42, "OutputID");
             CompareSetValue(() => _props.ByName.PowerNotify, (x) => _props.ByName.PowerNotify = x, 0, 42, "PowerNotify");
             CompareSetValue(() => _props.ByName.PowerState, (x) => _props.ByName.PowerState = x, 0, 42, "PowerState");
             CompareSetValue(() => _props.ByName.ResultCode, (x) => _props.ByName.ResultCode = x, ResultCodeConstants.Closed, ResultCodeConstants.Busy, "ResultCode");
             CompareSetValue(() => _props.ByName.ResultCodeExtended, (x) => _props.ByName.ResultCodeExtended = x, 0, 42, "ResultCodeExtended");
-            CompareSetValue(() => _props.ByName.ServiceObjectDescription, (x) => _props.ByName.ServiceObjectDescription = x, "", "42", "ServiceObjectDescription");
+            CompareSetValue(() => _props.ByName.ServiceObjectDescription, (x) => _props.ByName.ServiceObjectDescription = x, "[Error]", "42", "ServiceObjectDescription");
             CompareSetValue(() => _props.ByName.ServiceObjectVersion, (x) => _props.ByName.ServiceObjectVersion = x, 0, 42, "ServiceObjectVersion");
             CompareSetValue(() => _props.ByName.State, (x) => _props.ByName.State = x, ServiceStateConstants.OPOS_S_CLOSED, ServiceStateConstants.OPOS_S_BUSY, "State");
         }
