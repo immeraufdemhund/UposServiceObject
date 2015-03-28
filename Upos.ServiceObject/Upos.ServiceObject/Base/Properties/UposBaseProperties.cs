@@ -26,7 +26,24 @@ namespace Upos.ServiceObject.Base.Properties
             AddProperty("BinaryConversion", PropertyConstants.PIDX_BinaryConversion, 0);
             AddProperty("CapCompareFirmwareVersion", PropertyConstants.PIDX_CapCompareFirmwareVersion, 0);
             AddProperty("CapPowerReporting", PropertyConstants.PIDX_CapPowerReporting, 0);
+            AddProperty("CapStatisticsReporting", PropertyConstants.PIDX_CapStatisticsReporting, 0);
+            AddProperty("CapUpdateFirmware", PropertyConstants.PIDX_CapUpdateFirmware, 0);
+            AddProperty("CapUpdateStatistics", PropertyConstants.PIDX_CapUpdateStatistics, 0);
+            AddProperty("CheckHealthText", PropertyConstants.PIDX_CheckHealthText, "");
+            AddProperty("Claimed", PropertyConstants.PIDX_Claimed, 0);
+            AddProperty("DataCount", PropertyConstants.PIDX_DataCount, 0);
+            AddProperty("DataEventEnabled", PropertyConstants.PIDX_DataEventEnabled, 0);
+            AddProperty("DeviceDescription", PropertyConstants.PIDX_DeviceDescription, "");
+            AddProperty("DeviceEnabled", PropertyConstants.PIDX_DeviceEnabled, 0);
+            AddProperty("DeviceName", PropertyConstants.PIDX_DeviceName, "");
+            AddProperty("FreezeEvents", PropertyConstants.PIDX_FreezeEvents, 0);
+            AddProperty("OutputID", PropertyConstants.PIDX_OutputID, 0);
+            AddProperty("PowerNotify", PropertyConstants.PIDX_PowerNotify, 0);
+            AddProperty("PowerState", PropertyConstants.PIDX_PowerState, 0);
             AddProperty("ResultCode", PropertyConstants.PIDX_ResultCode, ResultCodeConstants.Closed);
+            AddProperty("ResultCodeExtended", PropertyConstants.PIDX_ResultCodeExtended, 0);
+            AddProperty("ServiceObjectDescription", PropertyConstants.PIDX_ServiceObjectDescription, "");
+            AddProperty("ServiceObjectVersion", PropertyConstants.PIDX_ServiceObjectVersion, 0);
             AddProperty("State", PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }
 
