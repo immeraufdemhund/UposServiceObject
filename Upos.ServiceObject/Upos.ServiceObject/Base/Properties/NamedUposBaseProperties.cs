@@ -72,7 +72,7 @@
         public int ResultCodeExtended
         {
             get { return _uposBaseProperties.GetIntProperty(PropertyConstants.PIDX_ResultCodeExtended); }
-            set { _uposBaseProperties.SetIntProperty(PropertyConstants.PIDX_Claimed, value); }
+            set { _uposBaseProperties.SetIntProperty(PropertyConstants.PIDX_ResultCodeExtended, value); }
         }
 
         public int ServiceObjectVersion
