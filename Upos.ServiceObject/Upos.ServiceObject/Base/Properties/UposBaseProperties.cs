@@ -23,6 +23,9 @@ namespace Upos.ServiceObject.Base.Properties
             _propertiesByName = new NamedUposBaseProperties(this);
 
             AddProperty("AutoDisable", PropertyConstants.PIDX_AutoDisable, 0);
+            AddProperty("BinaryConversion", PropertyConstants.PIDX_BinaryConversion, 0);
+            AddProperty("CapCompareFirmwareVersion", PropertyConstants.PIDX_CapCompareFirmwareVersion, 0);
+            AddProperty("CapPowerReporting", PropertyConstants.PIDX_CapPowerReporting, 0);
             AddProperty("ResultCode", PropertyConstants.PIDX_ResultCode, ResultCodeConstants.Closed);
             AddProperty("State", PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }

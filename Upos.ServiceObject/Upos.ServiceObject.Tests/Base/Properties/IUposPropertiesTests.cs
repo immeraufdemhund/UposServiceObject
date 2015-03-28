@@ -48,9 +48,9 @@ namespace Upos.ServiceObject.Base.Properties
                 .Should()
                 .Be(FakeIntPropertyValue, "because the value should not have been set");
 
-            _props.GetIntProperty(PropertyConstants.PIDX_ResultCode)
+            _props.ByName.ResultCode
                 .Should()
-                .Be((int)ResultCodeConstants.Illegal,
+                .Be(ResultCodeConstants.Illegal,
                     "because when setting an illegal value to a property, the result code is set to Illegal");
         }
 
@@ -65,9 +65,9 @@ namespace Upos.ServiceObject.Base.Properties
                 .Should()
                 .Be(FakeStringPropertyValue, "because the value should not have been set");
 
-            _props.GetIntProperty(PropertyConstants.PIDX_ResultCode)
+            _props.ByName.ResultCode
                 .Should()
-                .Be((int)ResultCodeConstants.Illegal,
+                .Be(ResultCodeConstants.Illegal,
                     "because when setting an illegal value to a property, the result code is set to Illegal");
         }
 
@@ -76,8 +76,14 @@ namespace Upos.ServiceObject.Base.Properties
         {
             _props.MonitorEvents();
             _props.ByName.AutoDisable = true;
+            _props.ByName.BinaryConversion = 1;
+            _props.ByName.CapCompareFirmwareVersion = true;
+            _props.ByName.CapPowerReporting = 1;
 
             _props.ShouldRaisePropertyChangeFor(x => x.ByName.AutoDisable);
+            _props.ShouldRaisePropertyChangeFor(x => x.ByName.BinaryConversion);
+            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapCompareFirmwareVersion);
+            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapPowerReporting);
         }
     }
 }
