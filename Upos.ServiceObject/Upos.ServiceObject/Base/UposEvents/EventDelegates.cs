@@ -2,6 +2,11 @@
 
 namespace Upos.ServiceObject.Base.UposEvents
 {
+    /// <summary>
+    /// Fired to present input data from the device to the application. 
+    /// </summary>
+    /// <param name="status">The Status parameter contains the input status. Its value is Control-dependent, and may describe the type or qualities of the input.</param>
+    public delegate void DataEventHandler(Int32 status);
 
     /// <summary>
     /// Fired by a Service Object to communicate directly with the application

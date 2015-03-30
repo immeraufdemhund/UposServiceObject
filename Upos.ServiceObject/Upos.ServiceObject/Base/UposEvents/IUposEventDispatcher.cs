@@ -1,5 +1,13 @@
 ﻿namespace Upos.ServiceObject.Base.UposEvents
 {
+    public static class IUposEventDispatcherFactory
+    {
+        public static IUposEventDispatcher Create(object controlObjectDispatcher)
+        {
+            return new UposEventDispatcher(null);
+        }
+    }
+
     public interface IUposEventDispatcher
     {
         void EnqueueDirectIOEvent(DirectIOEventArguments args);
