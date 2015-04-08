@@ -13,7 +13,7 @@ namespace Upos.ServiceObject.Base.UposEvents
 
         public void EnqueueDirectIOEvent(DirectIOEventArguments args)
         {
-            throw new NotImplementedException();
+            _callbacks.DirectIOEventHandler(args.EventNumber, args.NumericData, args.SringData);
         }
 
         public void EnqueueErrorEvent(ErrorEventArguments args)
@@ -23,7 +23,7 @@ namespace Upos.ServiceObject.Base.UposEvents
 
         public void EnqueueOutputCompleteEvent(OutputCompleteEventArguments args)
         {
-            throw new NotImplementedException();
+            _callbacks.OutputCompleteEventHandler(args.OutputID);
         }
 
         public void EnqueueStatusUpdateEvent(StatusUpdateEventArguemtns args)
