@@ -15,7 +15,7 @@ namespace Upos.ServiceObject.Base.UposEvents
     /// <param name="eventNumber">Event number</param>
     /// <param name="numericData">reference to addtional numeric data</param>
     /// <param name="stringData">reference to additional string data</param>
-    public delegate void DirectIOEventHandler(Int32 eventNumber, ref Int32 numericData, ref String stringData);
+    public delegate void DirectIOEventHandler(Int32 eventNumber, Int32 numericData, String stringData);
 
     /// <summary>
     /// Fired when an error is detected and the Control’s State transitions into the error state.

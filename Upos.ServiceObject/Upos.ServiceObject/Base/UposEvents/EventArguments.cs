@@ -6,7 +6,7 @@ namespace Upos.ServiceObject.Base.UposEvents
     {
         public DateTime TimeStamp { get; private set; }
 
-        public EventArguments()
+        protected EventArguments()
         {
             TimeStamp = DateTime.Now;
         }

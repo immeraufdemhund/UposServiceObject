@@ -6,16 +6,16 @@ namespace Upos.ServiceObject.Base
         /// <summary>
         /// Called to test the state of a device
         /// </summary>
-        /// <param name="Level"></param>
+        /// <param name="level"></param>
         /// <returns></returns>
-        int CheckHealth([In] int Level);
+        int CheckHealth([In] int level);
 
         /// <summary>
         /// Called to request exclusive access to the device.
         /// </summary>
-        /// <param name="Timeout"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>
-        int ClaimDevice([In] int Timeout);
+        int ClaimDevice([In] int timeout);
 
         /// <summary>
         /// Called to clear all device input that has been enqueued. 
@@ -44,9 +44,9 @@ namespace Upos.ServiceObject.Base
         /// <summary>
         /// This method is for internal use by the Control Object.
         /// </summary>
-        /// <param name="Freeze">The Freeze parameter is TRUE / VARIANT_TRUE when event firing must be frozen, and FALSE / VARIANT_FALSE when event firing is reenabled.</param>
+        /// <param name="freeze">The Freeze parameter is TRUE / VARIANT_TRUE when event firing must be frozen, and FALSE / VARIANT_FALSE when event firing is reenabled.</param>
         /// <returns></returns>
-        int COFreezeEvents([In, MarshalAs(UnmanagedType.VariantBool)] bool Freeze);
+        int COFreezeEvents([In, MarshalAs(UnmanagedType.VariantBool)] bool freeze);
 
         /// <summary>
         /// This method determines whether the version of the firmware contained in the specified file is newer than, older than, or the same as the version of the firmware in the physical device
@@ -100,9 +100,9 @@ namespace Upos.ServiceObject.Base
 
         int RetrieveStatistics([In, Out, MarshalAs(UnmanagedType.BStr)] ref string pStatisticsBuffer);
 
-        int UpdateFirmware([In, MarshalAs(UnmanagedType.BStr)] string FirmwareFileName);
+        int UpdateFirmware([In, MarshalAs(UnmanagedType.BStr)] string firmwareFileName);
 
-        int UpdateStatistics([In, MarshalAs(UnmanagedType.BStr)] string StatisticsBuffer);
+        int UpdateStatistics([In, MarshalAs(UnmanagedType.BStr)] string statisticsBuffer);
 
         int GetPropertyNumber([In] int lPropIndex);
 
@@ -110,6 +110,6 @@ namespace Upos.ServiceObject.Base
 
         void SetPropertyNumber([In] int lPropIndex, [In] int nNewValue);
 
-        void SetPropertyString([In] int lPropIndex, [In, MarshalAs(UnmanagedType.BStr)] string StringData);
+        void SetPropertyString([In] int lPropIndex, [In, MarshalAs(UnmanagedType.BStr)] string stringData);
     }
 }

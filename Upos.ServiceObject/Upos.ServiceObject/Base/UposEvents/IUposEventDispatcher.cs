@@ -2,9 +2,9 @@
 {
     public static class IUposEventDispatcherFactory
     {
-        public static IUposEventDispatcher Create(object controlObjectDispatcher)
+        public static IUposEventDispatcher Create(UposEventArguments uposEventArguments)
         {
-            return new UposEventDispatcher(null);
+            return new UposEventDispatcher(uposEventArguments);
         }
     }
 

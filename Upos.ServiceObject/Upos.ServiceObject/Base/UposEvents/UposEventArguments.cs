@@ -5,25 +5,25 @@ namespace Upos.ServiceObject.Base.UposEvents
     public class UposEventArguments
     {
         public IUposProperties Properties { get; private set; }
-        public DataEventHandler dataHandler { get; set; }
-        public ErrorEventHandler errorHandler { get; set; }
-        public DirectIOEventHandler directIOHandler { get; set; }
-        public OutputCompleteEventHandler outputHandler { get; set; }
-        public StatusUpdateEventHandler statusHandler { get; set; }
+        public DataEventHandler DataEventHandler { get; set; }
+        public ErrorEventHandler ErrorEventHandler { get; set; }
+        public DirectIOEventHandler DirectIOEventHandler { get; set; }
+        public OutputCompleteEventHandler OutputCompleteEventHandler { get; set; }
+        public StatusUpdateEventHandler StatusUpdateEventHandler { get; set; }
 
         public UposEventArguments(IUposProperties properties)
         {
             Properties = properties;
-            dataHandler = EmptyData;
-            errorHandler = EmptyError;
-            statusHandler = EmptyStatus;
-            outputHandler = EmptyOutput;
-            directIOHandler = EmptyDirectIO;
+            DataEventHandler = EmptyData;
+            ErrorEventHandler = EmptyError;
+            StatusUpdateEventHandler = EmptyStatus;
+            OutputCompleteEventHandler = EmptyOutput;
+            DirectIOEventHandler = EmptyDirectIO;
         }
 
         private void EmptyData(int status) { }
         private void EmptyError(int resultCode, int resultCodeExtended, int errorLocus, ref int errorResponse) { }
-        private void EmptyDirectIO(int eventNumber, ref int numericData, ref string stringData) { }
+        private void EmptyDirectIO(int eventNumber, int numericData, string stringData) { }
         private void EmptyOutput(int outputId) { }
         private void EmptyStatus(int status) { }
 
