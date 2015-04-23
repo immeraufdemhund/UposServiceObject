@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FA35D58E-5D10-4C66-9205-E4C48FC345A5}</ProjectGuid>
+    <ProjectGuid>{917D8419-9A23-44DD-9885-3676E6F2800D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Upos.ServiceObject</RootNamespace>
-    <AssemblyName>Upos.ServiceObject</AssemblyName>
+    <RootNamespace>DemoServiceObjects</RootNamespace>
+    <AssemblyName>DemoServiceObjects</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -31,40 +29,18 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\ErrorLocusConstants.cs" />
-    <Compile Include="Base\ErrorResponseConstants.cs" />
-    <Compile Include="Base\IUposBase.cs" />
-    <Compile Include="Base\OpenResultConstants.cs" />
-    <Compile Include="Base\Properties\INamedUposBaseProperties.cs" />
-    <Compile Include="Base\Properties\IUposProperties.cs" />
-    <Compile Include="Base\Properties\IUposProperty.cs" />
-    <Compile Include="Base\Properties\NamedUposBaseProperties.cs" />
-    <Compile Include="Base\Properties\PropertyConstants.cs" />
-    <Compile Include="Base\Properties\UposBaseProperties.cs" />
-    <Compile Include="Base\Properties\Validators\IPropertyValidator.cs" />
-    <Compile Include="Base\ResultCodeConstants.cs" />
-    <Compile Include="Base\ServiceStateConstants.cs" />
-    <Compile Include="Base\StatusUpdateEventConstants.cs" />
-    <Compile Include="Base\UposBase.cs" />
-    <Compile Include="Base\UposEvents\DeviceSpecificControlObjects.cs" />
-    <Compile Include="Base\UposEvents\DeviceSpecificControlsObjectInterfaces.cs" />
-    <Compile Include="Base\UposEvents\EventArguments.cs" />
-    <Compile Include="Base\UposEvents\EventDelegates.cs" />
-    <Compile Include="Base\UposEvents\IUposEventDispatcher.cs" />
-    <Compile Include="Base\UposEvents\UposEventArguments.cs" />
-    <Compile Include="Base\UposEvents\UposEventDispatcher.cs" />
-    <Compile Include="DeviceSpecific\IMsrServiceObject.cs" />
+    <Compile Include="DemoMsr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <ProjectReference Include="..\Upos.ServiceObject\Upos.ServiceObject.csproj">
+      <Project>{fa35d58e-5d10-4c66-9205-e4c48fc345a5}</Project>
+      <Name>Upos.ServiceObject</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
