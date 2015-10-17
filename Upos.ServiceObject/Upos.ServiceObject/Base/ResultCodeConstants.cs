@@ -11,7 +11,7 @@ namespace Upos.ServiceObject.Base
         /// <summary>
         /// Base number for all error values. Do not use
         /// </summary>
-        Oposerr = 100, // Base for ResultCode errors.
+        Oposerr = 100,
 
         /// <summary>
         /// An attempt was made to access a closed Device
@@ -89,29 +89,29 @@ namespace Upos.ServiceObject.Base
         /// <summary>
         /// The requested operation can not be performed since it has been deprecated.
         /// </summary>
-        Deprecated = 15 + Oposerr, // (added in 1.11)
+        Deprecated = 15 + Oposerr,
 
-
-        OposErrExt = 200, // Base for ResultCodeExtendedErrors.
-
-
+        /// <summary>
+        /// Base for ResultCodeExtendedErrors. Do not use
+        /// </summary>
+        OposErrExt = 200,
 
         /// <summary>
         /// At least one of the specified statistics could not be updated
         /// The following applies to ResetStatistics and UpdateStatistics.
         /// </summary>
-        EStatsError = 80 + OposErrExt, // (added in 1.8)
+        EStatsError = 80 + OposErrExt,
 
         /// <summary>
         /// At least one other statistic is required to be updated in addition to a requested statistic.
         /// The following applies to ResetStatistics and UpdateStatistics.
         /// </summary>
-        EStatsDependency = 82 + OposErrExt, // (added in 1.10)
+        EStatsDependency = 82 + OposErrExt,
 
         /// <summary>
         /// The specified firmware file(s) exist, but one or more are either not in the correct format or are corrupt.
         /// The following applies to CompareFirmwareVersion and UpdateFirmware.
         /// </summary>
-        EFirmwareBadFile = 81 + OposErrExt, // (added in 1.9)
+        EFirmwareBadFile = 81 + OposErrExt,
     }
 }

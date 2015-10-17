@@ -97,7 +97,6 @@ namespace Upos.ServiceObject.Base.Properties
             else
             {
                 SetResultCode(ResultCodeConstants.Illegal);
-
             }
         }
 
