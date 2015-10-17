@@ -5,12 +5,12 @@ using Upos.ServiceObject.DeviceSpecific;
 
 namespace DemoServiceObjects
 {
-    [ComVisible(true), Guid("928AAE48-14AA-4341-B8FF-D79D584C9FE4"), ClassInterface(ClassInterfaceType.AutoDual), ProgId("DemoServiceObject.Msr")]
+    [ComVisible(true), Guid("928AAE48-14AA-4341-B8FF-D79D584C9FE4"), ClassInterface(ClassInterfaceType.AutoDispatch), ProgId("DemoServiceObject.Msr")]
     public class DemoMsr : UposBase, IMsrServiceObject
     {
         public DemoMsr()
         {
-            //_props.ByName.ServiceObjectVersion = 1 * 1000000 + 13 * 1000 + 0;
+            _props.ByName.ServiceObjectVersion = 1 * 1000000 + 13 * 1000 + 0;
         }
 
         public int AuthenticateDevice(string deviceResponse)

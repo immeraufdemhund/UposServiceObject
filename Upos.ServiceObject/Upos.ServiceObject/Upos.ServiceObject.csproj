@@ -34,8 +34,15 @@
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Upos.ServiceObject.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Upos.ServiceObject.snk" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\ErrorLocusConstants.cs" />
