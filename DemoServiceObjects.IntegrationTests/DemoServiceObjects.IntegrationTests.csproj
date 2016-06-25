@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2A8317DE-929C-407C-9824-99EAB05BEA80}</ProjectGuid>
+    <ProjectGuid>{8A622C64-A644-4685-B092-A5205D9CE46B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Upos.ServiceObject.IntegrationTests</RootNamespace>
-    <AssemblyName>Upos.ServiceObject.IntegrationTests</AssemblyName>
+    <RootNamespace>DemoServiceObjects.IntegrationTests</RootNamespace>
+    <AssemblyName>DemoServiceObjects.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -25,7 +25,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,21 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=4.9.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.9.1\lib\net45\FluentAssertions.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=4.9.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <HintPath>..\packages\FluentAssertions.4.9.1\lib\net45\FluentAssertions.Core.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.2.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.2.1\lib\net45\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -61,42 +46,7 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
-    <Compile Include="DemoMsrTests.cs" />
-    <Compile Include="OposTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <COMReference Include="OPOSCONSTANTSLib">
-      <Guid>{CCB99150-B81E-11D2-AB74-0040054C3719}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="OposMSR_CCO">
-      <Guid>{CCB90120-B81E-11D2-AB74-0040054C3719}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DemoServiceObjects\DemoServiceObjects.csproj">
-      <Project>{917d8419-9a23-44dd-9885-3676e6f2800d}</Project>
-      <Name>DemoServiceObjects</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Upos.ServiceObject\Upos.ServiceObject.csproj">
-      <Project>{FA35D58E-5D10-4C66-9205-E4C48FC345A5}</Project>
-      <Name>Upos.ServiceObject</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

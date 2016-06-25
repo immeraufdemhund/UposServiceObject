@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upos.ServiceObject", "Upos.ServiceObject\Upos.ServiceObject.csproj", "{FA35D58E-5D10-4C66-9205-E4C48FC345A5}"
 EndProject
@@ -10,6 +10,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Upos.ServiceObject.IntegrationTests", "Upos.ServiceObject.IntegrationTests\Upos.ServiceObject.IntegrationTests.csproj", "{2A8317DE-929C-407C-9824-99EAB05BEA80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoServiceObjects", "DemoServiceObjects\DemoServiceObjects.csproj", "{917D8419-9A23-44DD-9885-3676E6F2800D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{3DA5033A-080C-4AB7-B414-E9D64752E286}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoServiceObjects.IntegrationTests", "DemoServiceObjects.IntegrationTests\DemoServiceObjects.IntegrationTests.csproj", "{8A622C64-A644-4685-B092-A5205D9CE46B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +37,17 @@ Global
 		{917D8419-9A23-44DD-9885-3676E6F2800D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{917D8419-9A23-44DD-9885-3676E6F2800D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{917D8419-9A23-44DD-9885-3676E6F2800D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A622C64-A644-4685-B092-A5205D9CE46B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A622C64-A644-4685-B092-A5205D9CE46B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A622C64-A644-4685-B092-A5205D9CE46B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A622C64-A644-4685-B092-A5205D9CE46B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A83AF042-2C5C-4780-952A-11D2CCAB16B5} = {3DA5033A-080C-4AB7-B414-E9D64752E286}
+		{2A8317DE-929C-407C-9824-99EAB05BEA80} = {3DA5033A-080C-4AB7-B414-E9D64752E286}
+		{8A622C64-A644-4685-B092-A5205D9CE46B} = {3DA5033A-080C-4AB7-B414-E9D64752E286}
 	EndGlobalSection
 EndGlobal
