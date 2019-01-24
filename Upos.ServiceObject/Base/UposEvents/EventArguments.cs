@@ -16,14 +16,14 @@ namespace Upos.ServiceObject.Base.UposEvents
     {
         public int EventNumber { get; private set; }
         public int NumericData { get; private set; }
-        public string SringData { get; private set; }
+        public string StringData { get; private set; }
 
         public DirectIOEventArguments(int eventNumber, int numericData, string stringData)
             : base()
         {
             EventNumber = eventNumber;
             NumericData = numericData;
-            SringData = stringData;
+            StringData = stringData;
         }
     }
 
@@ -58,7 +58,6 @@ namespace Upos.ServiceObject.Base.UposEvents
         {
             ResultCodeExtended = resultCodeExtended;
         }
-
     }
 
     public class OutputCompleteEventArguments : EventArguments

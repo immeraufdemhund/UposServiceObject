@@ -26,6 +26,5 @@ namespace Upos.ServiceObject.Base.UposEvents
         private void EmptyDirectIO(int eventNumber, int numericData, string stringData) { }
         private void EmptyOutput(int outputId) { }
         private void EmptyStatus(int status) { }
-
     }
 }

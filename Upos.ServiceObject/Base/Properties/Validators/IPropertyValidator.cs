@@ -12,11 +12,9 @@
 
     internal class AlwaysValidPropertyValidator : IPropertyValidator
     {
-
         public bool Validate(object suggestedValue)
         {
             return true;
         }
     }
-
 }

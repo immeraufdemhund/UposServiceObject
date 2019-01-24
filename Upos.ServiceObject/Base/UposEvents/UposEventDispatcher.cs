@@ -13,7 +13,7 @@ namespace Upos.ServiceObject.Base.UposEvents
 
         public void EnqueueDirectIOEvent(DirectIOEventArguments args)
         {
-            _callbacks.DirectIOEventHandler(args.EventNumber, args.NumericData, args.SringData);
+            _callbacks.DirectIOEventHandler(args.EventNumber, args.NumericData, args.StringData);
         }
 
         public void EnqueueErrorEvent(ErrorEventArguments args)

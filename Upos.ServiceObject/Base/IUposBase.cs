@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+
 namespace Upos.ServiceObject.Base
 {
     public interface IUposBase
@@ -20,7 +21,7 @@ namespace Upos.ServiceObject.Base
         int ClaimDevice([In] int Timeout);
 
         /// <summary>
-        /// Called to clear all device input that has been enqueued. 
+        /// Called to clear all device input that has been enqueued.
         /// </summary>
         /// <returns></returns>
         [DispId(0x02)]
@@ -90,7 +91,7 @@ namespace Upos.ServiceObject.Base
         /// Call to open a device for subsequent I/O.
         /// </summary>
         /// <param name="deviceClass">Contains the requested device class, which are given in the header file OPOS.HI</param>
-        /// <param name="deviceName">Contains the Device Name to be managed by this Service Object. The relationship between the device /// name and physical devices is determined by entries within the operating system registry; a setup or configuration utility maintains these entries. (See the “Application Programmer’s Guide” appendix “OPOS Registry Usage.”)</param>
+        /// <param name="deviceName">Contains the Device Name to be managed by this Service Object. The relationship between the device name and physical devices is determined by entries within the operating system registry; a setup or configuration utility maintains these entries. (See the “Application Programmer’s Guide” appendix “OPOS Registry Usage.”)</param>
         /// <param name="dispatchObject">Points to the Control Object’s dispatch interface, which contains the event request methods.</param>
         /// <returns></returns>
         [DispId(0x0A)]

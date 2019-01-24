@@ -1,5 +1,4 @@
-﻿using System;
-using Upos.ServiceObject.Base.Properties;
+﻿using Upos.ServiceObject.Base.Properties;
 
 namespace Upos.ServiceObject.Base
 {
@@ -7,10 +6,9 @@ namespace Upos.ServiceObject.Base
     {
         protected readonly IUposProperties _props;
 
-        public UposBase()
+        protected UposBase()
         {
             _props = IUposPropertiesFactory.Create(this);
-            //_props.PropertyChanged += (s, e) => { Console.WriteLine(e.PropertyName); };
         }
 
         public int CheckHealth(int Level)

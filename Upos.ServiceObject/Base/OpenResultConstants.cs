@@ -30,7 +30,7 @@ namespace Upos.ServiceObject.Base
         OPOS_ORS_CONFIG = 403,
 
         /// <summary>
-        /// Errors greater than this value are service objectspecific.
+        /// Errors greater than this value are service object specific.
         /// If the previous return values do not apply, then the SO
         /// may define additional OpenResult values.
         /// </summary>
