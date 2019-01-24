@@ -45,6 +45,8 @@
     <None Include="Upos.ServiceObject.snk" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\COPOS.cs" />
+    <Compile Include="Base\DynamicControlObject.cs" />
     <Compile Include="Base\ErrorLocusConstants.cs" />
     <Compile Include="Base\ErrorResponseConstants.cs" />
     <Compile Include="Base\IUposBase.cs" />
