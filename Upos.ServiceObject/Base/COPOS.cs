@@ -8,22 +8,22 @@ namespace Upos.ServiceObject.Base
     /// </summary>
     public interface COPOS
     {
-        [Description("method SOData")]
+        [Description("method SOData"), DispId(1)]
         void SOData([In] int Status);
 
-        [Description("method SODirectIO")]
+        [Description("method SODirectIO"),DispId(2)]
         void SODirectIO([In] int EventNumber, [In, Out] ref int pData, [In, Out, MarshalAs(UnmanagedType.BStr)]ref string pString);
 
-        [Description("method SOError")]
+        [Description("method SOError"),DispId(3)]
         void SOError([In] int ResultCode, [In] int ResultCodeExtended, [In] int ErrorLocus, [In, Out] ref int pErrorResponse);
 
-        [Description("method SOOutputComplete")]
+        [Description("method SOOutputComplete"),DispId(4)]
         void SOOutputComplete([In] int OutputID);
 
-        [Description("method SOStatusUpdate")]
+        [Description("method SOStatusUpdate"),DispId(5)]
         void SOStatusUpdate([In] int Data);
 
-        [Description("method SOProcessID")]
+        [Description("method SOProcessID"),DispId(9)]
         void SOProcessID([Out] out int pProcessID);
     }
 }

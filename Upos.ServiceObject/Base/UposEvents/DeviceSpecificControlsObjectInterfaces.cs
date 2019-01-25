@@ -39,21 +39,7 @@ namespace Upos.ServiceObject.Base.UposEvents
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsDual), Guid("CCB9xxxx-B81E-11D2-AB74-0040054C3719")]internal interface ToneIndicatorControlObject{[DispId(1)]void SOData(int Status);[DispId(2)]void SODirectIO(int EventNumber, ref int pData, ref string pString);[DispId(3)]void SOError(int ResultCode, int ResultCodeExtended, int ErrorLocus, ref int pErrorResponse);[DispId(4)]void SOOutputCompleteDummy(int OutputID);[DispId(5)]void SOStatusUpdate(int Data);}
      */
     [ComImport, InterfaceType(ComInterfaceType.InterfaceIsDual), Guid("CCB91121-B81E-11D2-AB74-0040054C3719")]/*CCB90123-B81E-11D2-AB74-0040054C3719   <-- This one is the IOpos Event.. i wanna try it*/
-    internal interface MsrControlObject
+    public interface MsrControlObject : COPOS
     {
-        [DispId(1)]
-        void SOData(int status);
-
-        [DispId(2)]
-        void SODirectIO(int eventNumber, ref int pData, ref string pString);
-
-        [DispId(3)]
-        void SOError(int resultCode, int resultCodeExtended, int errorLocus, ref int pErrorResponse);
-
-        [DispId(4)]
-        void SOOutputCompleteDummy(int outputId);
-
-        [DispId(5)]
-        void SOStatusUpdate(int data);
     }
 }

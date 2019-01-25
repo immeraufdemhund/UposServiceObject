@@ -1,26 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Upos.ServiceObject.Base.Properties.Validators;
 
 namespace Upos.ServiceObject.Base.Properties
 {
-    internal class UposBaseProperties : IUposProperties
+    public class UposBaseProperties : IUposProperties
     {
+        public INamedUposBaseProperties ByName { get; }
+
+        protected const int PIDX_NUMBER = 0;
+        protected const int PIDX_STRING = 1000000;
+
         private readonly Dictionary<int, IUposProperty> _propDictionary;
-        private readonly IUposBase _uposBase;
-        private readonly INamedUposBaseProperties _propertiesByName;
 
-        public UposBaseProperties(IUposBase uposBase)
-            : this(new Dictionary<int, IUposProperty>(), uposBase)
+        public UposBaseProperties()
         {
-        }
-
-        public UposBaseProperties(Dictionary<int, IUposProperty> propDictionary, IUposBase uposBase)
-        {
-            _propDictionary = propDictionary;
-            _uposBase = uposBase;
-            _propertiesByName = new NamedUposBaseProperties(this);
+            _propDictionary = new Dictionary<int, IUposProperty>();
+            ByName = new NamedUposBaseProperties(this);
 
             AddProperty("AutoDisable", PropertyConstants.PIDX_AutoDisable, 0);
             AddProperty("BinaryConversion", PropertyConstants.PIDX_BinaryConversion, 0);
@@ -46,10 +44,6 @@ namespace Upos.ServiceObject.Base.Properties
             AddProperty("ServiceObjectVersion", PropertyConstants.PIDX_ServiceObjectVersion, 0);
             AddProperty("State", PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }
-
-        public IUposBase ServiceObject { get { return _uposBase; } }
-
-        public INamedUposBaseProperties ByName { get { return _propertiesByName; } }
 
         public int GetIntProperty(int propertyIndex)
         {
@@ -87,6 +81,19 @@ namespace Upos.ServiceObject.Base.Properties
             SetProperty(propertyValue, value);
         }
 
+        public void AddInputProperty(string name, int propertyIndex, object value)
+        {
+            _propDictionary.Add(propertyIndex, new InputProperty(name, new AlwaysValidPropertyValidator(), value));
+        }
+
+        public void ClearInputProperties()
+        {
+            foreach (var propDictionaryValue in _propDictionary.Values.OfType<InputProperty>())
+            {
+                propDictionaryValue.ResetValue();
+            }
+        }
+
         private void SetProperty(int propertyIndex, object propertyValue)
         {
             if (_propDictionary[propertyIndex].Validator(propertyValue))
@@ -107,10 +114,9 @@ namespace Upos.ServiceObject.Base.Properties
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void FirePropertyChanged(string name)
+        public void FirePropertyChanged(string name)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(name));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }

@@ -12,6 +12,21 @@ namespace Upos.ServiceObject.Base.Properties
         Func<object, bool> Validator { get; set; }
     }
 
+    public class InputProperty : UposProperty
+    {
+        private readonly object _defaultValue;
+
+        public InputProperty(string name, IPropertyValidator validator, object defaultValue)
+            :base(name, validator, defaultValue)
+        {
+            _defaultValue = defaultValue;
+        }
+        public void ResetValue()
+        {
+            Value = _defaultValue;
+        }
+    }
+
     public class UposProperty : IUposProperty
     {
         /// <summary>
@@ -50,6 +65,5 @@ namespace Upos.ServiceObject.Base.Properties
             Validator = validator.Validate;
             Value = defaultValue;
         }
-
     }
 }

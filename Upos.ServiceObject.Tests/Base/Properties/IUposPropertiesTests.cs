@@ -17,7 +17,7 @@ namespace Upos.ServiceObject.Base.Properties
         [SetUp]
         public void Setup()
         {
-            _props = IUposPropertiesFactory.Create(null);
+            _props = new UposBaseProperties();
             _props.AddProperty("FakePropertyInt", FakeIntPropertyIndex, FakeIntPropertyValue);
             _props.AddProperty("FakePropertyString", FakeStringPropertyIndex, FakeStringPropertyValue);
         }

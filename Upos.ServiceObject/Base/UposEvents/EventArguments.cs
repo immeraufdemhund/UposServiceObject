@@ -4,10 +4,12 @@ namespace Upos.ServiceObject.Base.UposEvents
 {
     public abstract class EventArguments
     {
-        public DateTime TimeStamp { get; private set; }
+        public DateTime TimeStamp { get; }
+        internal bool IsImmediate { get; }
 
-        protected EventArguments()
+        protected EventArguments(bool isImmediate)
         {
+            IsImmediate = isImmediate;
             TimeStamp = DateTime.Now;
         }
     }
@@ -15,11 +17,11 @@ namespace Upos.ServiceObject.Base.UposEvents
     public class DirectIOEventArguments : EventArguments
     {
         public int EventNumber { get; private set; }
-        public int NumericData { get; private set; }
-        public string StringData { get; private set; }
+        public int NumericData;
+        public string StringData;
 
         public DirectIOEventArguments(int eventNumber, int numericData, string stringData)
-            : base()
+            : base(true)
         {
             EventNumber = eventNumber;
             NumericData = numericData;
@@ -32,23 +34,23 @@ namespace Upos.ServiceObject.Base.UposEvents
         public ResultCodeConstants ResultCode { get; private set; }
         public int ResultCodeExtended { get; private set; }
         public ErrorLocusConstants ErrorLocus { get; private set; }
-        public ErrorResponseConstants ErrorResponse { get; private set; }
+        public int ErrorResponse;
 
         public ErrorEventArguments(ResultCodeConstants resultCode, ErrorLocusConstants errorLocus)
-            : base()
+            : base(false)
         {
             ResultCode = resultCode;
             ErrorLocus = errorLocus;
             switch (ErrorLocus)
             {
                 case ErrorLocusConstants.Output:
-                    ErrorResponse = ErrorResponseConstants.Retry;
+                    ErrorResponse = (int)ErrorResponseConstants.Retry;
                     break;
                 case ErrorLocusConstants.Input:
-                    ErrorResponse = ErrorResponseConstants.Clear;
+                    ErrorResponse = (int)ErrorResponseConstants.Clear;
                     break;
                 case ErrorLocusConstants.Input_Data:
-                    ErrorResponse = ErrorResponseConstants.ContinueInput;
+                    ErrorResponse = (int)ErrorResponseConstants.ContinueInput;
                     break;
             }
         }
@@ -65,25 +67,36 @@ namespace Upos.ServiceObject.Base.UposEvents
         public int OutputID { get; private set; }
 
         public OutputCompleteEventArguments(int outputId)
-            : base()
+            : base(false)
         {
             OutputID = outputId;
         }
     }
 
-    public class StatusUpdateEventArguemtns : EventArguments
+    public class StatusUpdateEventArguments : EventArguments
     {
         public int Status { get; private set; }
 
-        public StatusUpdateEventArguemtns(int status)
-            : base()
+        public StatusUpdateEventArguments(int status)
+            : base(true)
         {
             Status = status;
         }
 
-        public StatusUpdateEventArguemtns(StatusUpdateEventConstants status)
+        public StatusUpdateEventArguments(StatusUpdateEventConstants status)
             : this((int)status)
         {
+        }
+    }
+
+    public class DataEventArguments : EventArguments
+    {
+        public int Status { get; private set; }
+
+        public DataEventArguments(int status)
+            : base(false)
+        {
+            Status = status;
         }
     }
 }

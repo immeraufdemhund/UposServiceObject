@@ -1,95 +1,169 @@
-﻿using Upos.ServiceObject.Base.Properties;
+﻿using System;
+using System.Collections.Generic;
+using Upos.ServiceObject.Base.Properties;
+using Upos.ServiceObject.Base.UposEvents;
 
 namespace Upos.ServiceObject.Base
 {
     public abstract class UposBase : IUposBase
     {
-        protected readonly IUposProperties _props;
+        private EventThreadHelper _eventQueue;
+        protected string OpenServiceDeviceClass = "";
+        protected string OpenServiceDeviceName = "";
 
-        protected UposBase()
+        protected readonly IUposProperties _props;
+        private readonly IUposDevice _device;
+
+        protected UposBase(IUposProperties props, IUposDevice device)
         {
-            _props = IUposPropertiesFactory.Create(this);
+            _props = props;
+            _device = device;
         }
 
         public int CheckHealth(int Level)
         {
-            throw new System.NotImplementedException();
+            return (int)ResultCodeConstants.Illegal;
         }
 
         public int ClaimDevice(int Timeout)
         {
-            throw new System.NotImplementedException();
+            if (_props.ByName.Claimed) return (int) ResultCodeConstants.Success;
+            if (Timeout < -1) return (int) ResultCodeConstants.Illegal;
+
+            try
+            {
+                if (_device.CanClaimDevice())
+                {
+                    if (_device.ClaimDevice(TimeSpan.FromMilliseconds(Timeout)))
+                    {
+                        _props.SetIntProperty(PropertyConstants.PIDX_Claimed, 1);
+                        return (int)ResultCodeConstants.Success;
+                    }
+
+                    return (int) ResultCodeConstants.Timeout;
+                }
+
+                return (int)ResultCodeConstants.Illegal;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return (int)ResultCodeConstants.Failure;
+            }
         }
 
         public int ClearInput()
         {
-            throw new System.NotImplementedException();
+            ClearInputProperties();
+            _eventQueue.Clear();
+            return (int) ResultCodeConstants.Success;
         }
 
         public int ClearInputProperties()
         {
-            throw new System.NotImplementedException();
+            _props.ClearInputProperties();
+            return (int)ResultCodeConstants.Success;
         }
 
         public int ClearOutput()
         {
-            throw new System.NotImplementedException();
+            return (int) ResultCodeConstants.Failure;
         }
 
         public int CloseService()
         {
-            return 0;
+            if (_props.ByName.State == ServiceStateConstants.OPOS_S_CLOSED)
+            {
+                return (int) ResultCodeConstants.Success;
+            }
+            if (_props.GetIntProperty(PropertyConstants.PIDX_Claimed) > 0)
+            {
+                ReleaseDevice();
+            }
+
+            DestroyEventQueue();
+            _props.ByName.State = ServiceStateConstants.OPOS_S_CLOSED;
+            return (int)ResultCodeConstants.Success;
         }
 
         public int COFreezeEvents(bool Freeze)
         {
-            throw new System.NotImplementedException();
+            return (int) ResultCodeConstants.Failure;
         }
 
-        public int CompareFirmwareVersion(string firmwareFileName, out int result)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public int DirectIO(int command, ref int numericData, ref string stringData)
-        {
-            throw new System.NotImplementedException();
-        }
-
+        [Obsolete("Check if this is even used, I don't see it in my other code")]
         public int GetOpenResult()
         {
-            return 0;
+            return 999;
         }
 
         public int OpenService(string deviceClass, string deviceName, object dispatchObject)
         {
+            _eventQueue = new EventThreadHelper(GetDeviceSpecificControlObjectDispatcher(dispatchObject), _props);
+            var registryValues = RegistryHelper.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
+            VerifyDeviceSettings(registryValues);
+            OpenServiceDeviceClass = deviceClass;
+            OpenServiceDeviceName = deviceName;
             return 0;
         }
 
         public int ReleaseDevice()
         {
-            throw new System.NotImplementedException();
+            if (!_props.ByName.Claimed)
+            {
+                return (int) ResultCodeConstants.Illegal;
+            }
+
+            if (_device.CanReleaseDevice())
+            {
+                if (_device.ReleaseDevice())
+                {
+                    ClearInput();
+                    _props.ByName.Claimed = false;
+                    return (int)ResultCodeConstants.Success;
+                }
+                return (int)ResultCodeConstants.Failure;
+            }
+
+            return (int) ResultCodeConstants.Success;
         }
+
+        #region Statistics
 
         public int ResetStatistics(string statisticsBuffer)
         {
-            throw new System.NotImplementedException();
+            return (int) ResultCodeConstants.Failure;
         }
 
         public int RetrieveStatistics(ref string pStatisticsBuffer)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public int UpdateFirmware(string FirmwareFileName)
-        {
-            throw new System.NotImplementedException();
+            return (int)ResultCodeConstants.Failure;
         }
 
         public int UpdateStatistics(string StatisticsBuffer)
         {
-            throw new System.NotImplementedException();
+            return (int)ResultCodeConstants.Failure;
         }
+
+        #endregion
+
+        #region Firmware
+
+        public int CompareFirmwareVersion(string firmwareFileName, out int result)
+        {
+            result = 0;
+            return (int)ResultCodeConstants.Failure;
+        }
+
+        public int UpdateFirmware(string FirmwareFileName)
+        {
+            return (int)ResultCodeConstants.Failure;
+        }
+
+
+        #endregion
+
+        #region Properties
 
         public int GetPropertyNumber(int lPropIndex)
         {
@@ -110,5 +184,37 @@ namespace Upos.ServiceObject.Base
         {
             _props.SetStringProperty(lPropIndex, StringData);
         }
+
+        #endregion
+
+        public abstract int DirectIO(int command, ref int numericData, ref string stringData);
+
+        protected abstract void VerifyDeviceSettings(Dictionary<string, object> deviceSettings);
+        protected abstract COPOS GetDeviceSpecificControlObjectDispatcher(object dispatchObject);
+
+        private void DestroyEventQueue()
+        {
+            try
+            {
+                _eventQueue?.Dispose();
+            }
+            finally
+            {
+                _eventQueue = null;
+            }
+        }
+    }
+
+    public interface IUposDevice
+    {
+        bool CanCommunicateWithDevice();
+        bool CanClaimDevice();
+        bool CanReleaseDevice();
+        bool CanEnableDevice();
+        bool CanDisableDevice();
+        bool ClaimDevice(TimeSpan timeout);
+        bool ReleaseDevice();
+        bool EnableDevice();
+        bool DisableDevice();
     }
 }

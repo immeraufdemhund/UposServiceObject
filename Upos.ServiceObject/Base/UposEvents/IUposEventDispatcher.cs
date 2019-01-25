@@ -16,6 +16,6 @@
 
         void EnqueueOutputCompleteEvent(OutputCompleteEventArguments args);
 
-        void EnqueueStatusUpdateEvent(StatusUpdateEventArguemtns args);
+        void EnqueueStatusUpdateEvent(StatusUpdateEventArguments args);
     }
 }

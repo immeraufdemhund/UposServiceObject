@@ -66,11 +66,13 @@
     <Compile Include="Base\UposEvents\DeviceSpecificControlsObjectInterfaces.cs" />
     <Compile Include="Base\UposEvents\EventArguments.cs" />
     <Compile Include="Base\UposEvents\EventDelegates.cs" />
+    <Compile Include="Base\UposEvents\EventThreadHelper.cs" />
     <Compile Include="Base\UposEvents\IUposEventDispatcher.cs" />
     <Compile Include="Base\UposEvents\UposEventArguments.cs" />
     <Compile Include="Base\UposEvents\UposEventDispatcher.cs" />
     <Compile Include="DeviceSpecific\IMsrServiceObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistryHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
