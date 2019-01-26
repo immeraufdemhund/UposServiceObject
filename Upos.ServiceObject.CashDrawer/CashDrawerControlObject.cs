@@ -26,7 +26,7 @@
 
         protected override void FireOutputCompleteEvent(int outputId)
         {
-            _controlObject.SOOutputCompleteDummy(outputId);
+            _controlObject.SOOutputComplete(outputId);
         }
 
         protected override void FireStatusUpdateEvent(int data)
@@ -36,7 +36,7 @@
 
         protected override void GetProcessId(out int pProcessId)
         {
-            pProcessId = _controlObject.SOProcessID();
+            _controlObject.SOProcessID(out pProcessId);
         }
     }
 }

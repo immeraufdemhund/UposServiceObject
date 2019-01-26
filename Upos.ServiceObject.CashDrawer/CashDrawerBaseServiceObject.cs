@@ -59,5 +59,10 @@ namespace Upos.ServiceObject.CashDrawer
                 return (int)ResultCodeConstants.Failure; //TODO get error codes
             }
         }
+
+        protected override COPOS GetDeviceSpecificControlObjectDispatcher(object dispatchObject)
+        {
+            return new CashDrawerControlObject(dispatchObject);
+        }
     }
 }
