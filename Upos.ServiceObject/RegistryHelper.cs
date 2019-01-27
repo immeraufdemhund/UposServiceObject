@@ -1,8 +1,10 @@
-﻿using Microsoft.Win32;
+﻿using System;
+using Microsoft.Win32;
 using System.Collections.Generic;
 
 namespace Upos.ServiceObject
 {
+    [Obsolete("I don't like this")]
     public static class RegistryHelper
     {
         public static Dictionary<string, object> GetRegistryValues(string deviceClass, string deviceName)
