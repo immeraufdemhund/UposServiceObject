@@ -17,7 +17,7 @@ namespace Upos.ServiceObject.Base.Properties
         void SetStringProperty(int propertyIndex, string propertyValue);
 
         void SetPropertyValidator(int propertyIndex, IPropertyValidator validatorFunc);
-        void SetPropertyValidator(int propertyIndex, Func<object, bool> validatorFunc);
+        void SetPropertyValidator(int propertyIndex, Func<object, ResultCodeConstants> validatorFunc);
         void FirePropertyChanged(string propertyName);
         void ClearInputProperties();
     }

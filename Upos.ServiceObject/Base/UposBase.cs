@@ -101,10 +101,20 @@ namespace Upos.ServiceObject.Base
         {
             _eventQueue = new EventThreadHelper(GetDeviceSpecificControlObjectDispatcher(dispatchObject), _props);
             var registryValues = RegistryHelper.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
-            VerifyDeviceSettings(registryValues);
-            OpenServiceDeviceClass = deviceClass;
-            OpenServiceDeviceName = deviceName;
-            return 0;
+            if (VerifyDeviceSettings(registryValues))
+            {
+                OpenServiceDeviceClass = deviceClass;
+                OpenServiceDeviceName = deviceName;
+                if (_device.CanCommunicateWithDevice())
+                {
+                    _props.ByName.State = ServiceStateConstants.OPOS_S_IDLE;
+                    return (int) ResultCodeConstants.Success;
+                }
+
+                return (int) ResultCodeConstants.NoHardware;
+            }
+
+            return (int) ResultCodeConstants.Failure;
         }
 
         public int ReleaseDevice()
@@ -189,7 +199,7 @@ namespace Upos.ServiceObject.Base
 
         public abstract int DirectIO(int command, ref int numericData, ref string stringData);
 
-        protected abstract void VerifyDeviceSettings(Dictionary<string, object> deviceSettings);
+        protected abstract bool VerifyDeviceSettings(Dictionary<string, object> deviceSettings);
         protected abstract COPOS GetDeviceSpecificControlObjectDispatcher(object dispatchObject);
 
         private void DestroyEventQueue()

@@ -9,7 +9,7 @@ namespace Upos.ServiceObject.Base.Properties
 
         object Value { get; set; }
 
-        Func<object, bool> Validator { get; set; }
+        Func<object, ResultCodeConstants> Validator { get; set; }
     }
 
     public class InputProperty : UposProperty
@@ -42,7 +42,7 @@ namespace Upos.ServiceObject.Base.Properties
         /// <summary>
         /// Validation rule used to check the value that is suggested to be set
         /// </summary>
-        public Func<object, bool> Validator { get; set; }
+        public Func<object, ResultCodeConstants> Validator { get; set; }
 
         public UposProperty()
             : this("", new AlwaysValidPropertyValidator(), null)

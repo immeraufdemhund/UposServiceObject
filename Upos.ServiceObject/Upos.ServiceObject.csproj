@@ -57,6 +57,8 @@
     <Compile Include="Base\Properties\NamedUposBaseProperties.cs" />
     <Compile Include="Base\Properties\PropertyConstants.cs" />
     <Compile Include="Base\Properties\UposBaseProperties.cs" />
+    <Compile Include="Base\Properties\Validators\AlwaysValidPropertyValidator.cs" />
+    <Compile Include="Base\Properties\Validators\DeviceClaimedValidator.cs" />
     <Compile Include="Base\Properties\Validators\IPropertyValidator.cs" />
     <Compile Include="Base\ResultCodeConstants.cs" />
     <Compile Include="Base\ServiceStateConstants.cs" />

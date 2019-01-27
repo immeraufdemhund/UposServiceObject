@@ -70,7 +70,7 @@ namespace Upos.ServiceObject.Base.Properties
             _propDictionary[propertyIndex].Validator = validatorFunc.Validate;
         }
 
-        public void SetPropertyValidator(int propertyIndex, Func<object, bool> validatorFunc)
+        public void SetPropertyValidator(int propertyIndex, Func<object, ResultCodeConstants> validatorFunc)
         {
             _propDictionary[propertyIndex].Validator = validatorFunc;
         }
@@ -96,8 +96,9 @@ namespace Upos.ServiceObject.Base.Properties
 
         private void SetProperty(int propertyIndex, object propertyValue)
         {
-            if (_propDictionary[propertyIndex].Validator(propertyValue))
+            if (_propDictionary[propertyIndex].Validator(propertyValue) == ResultCodeConstants.Success)
             {
+                SetResultCode(ResultCodeConstants.Success);
                 _propDictionary[propertyIndex].Value = propertyValue;
                 FirePropertyChanged(_propDictionary[propertyIndex].Name);
             }
