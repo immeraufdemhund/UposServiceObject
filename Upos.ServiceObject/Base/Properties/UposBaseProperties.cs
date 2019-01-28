@@ -6,7 +6,7 @@ using Upos.ServiceObject.Base.Properties.Validators;
 
 namespace Upos.ServiceObject.Base.Properties
 {
-    public class UposBaseProperties : IUposProperties
+    public abstract class UposBaseProperties : IUposProperties
     {
         public INamedUposBaseProperties ByName { get; }
 
@@ -15,11 +15,86 @@ namespace Upos.ServiceObject.Base.Properties
 
         private readonly Dictionary<int, IUposProperty> _propDictionary;
 
-        public UposBaseProperties()
+        protected UposBaseProperties()
         {
             _propDictionary = new Dictionary<int, IUposProperty>();
             ByName = new NamedUposBaseProperties(this);
 
+            AddAllBaseProperties();
+            AddDeviceSpecificProperties();
+            AddGenericValidators();
+            ReplaceValidators();
+        }
+
+        public int GetIntProperty(int propertyIndex)
+        {
+            return (int)_propDictionary[propertyIndex].Value;
+        }
+
+        public ResultCodeConstants SetIntProperty(int propertyIndex, int propertyValue)
+        {
+            return SetProperty(propertyIndex, propertyValue);
+        }
+
+        public string GetStringProperty(int propertyIndex)
+        {
+            return (string)_propDictionary[propertyIndex].Value;
+        }
+
+        public ResultCodeConstants SetStringProperty(int propertyIndex, string propertyValue)
+        {
+            return SetProperty(propertyIndex, propertyValue);
+        }
+
+        public void SetPropertyValidator(int propertyIndex, IPropertyValidator validatorFunc)
+        {
+            _propDictionary[propertyIndex].Validator = validatorFunc.Validate;
+        }
+
+        public void SetPropertyValidator(int propertyIndex, Func<object, ResultCodeConstants> validatorFunc)
+        {
+            _propDictionary[propertyIndex].Validator = validatorFunc;
+        }
+
+        public void AddProperty(string name, int propertyValue, object value)
+        {
+            _propDictionary.Add(propertyValue, new UposProperty(name, value));
+        }
+
+        public void AddInputProperty(string name, int propertyIndex, object value)
+        {
+            _propDictionary.Add(propertyIndex, new InputProperty(name, new AlwaysValidPropertyValidator(), value));
+        }
+
+        public void ClearInputProperties()
+        {
+            foreach (var propDictionaryValue in _propDictionary.Values.OfType<InputProperty>())
+            {
+                propDictionaryValue.ResetValue();
+            }
+        }
+
+        private ResultCodeConstants SetProperty(int propertyIndex, object propertyValue)
+        {
+            if (_propDictionary[propertyIndex].Validator(propertyValue) == ResultCodeConstants.Success)
+            {
+                _propDictionary[propertyIndex].Value = propertyValue;
+                FirePropertyChanged(_propDictionary[propertyIndex].Name);
+                return ResultCodeConstants.Success;
+            }
+
+            return ResultCodeConstants.Illegal;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void FirePropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private void AddAllBaseProperties()
+        {
             AddProperty("AutoDisable", PropertyConstants.PIDX_AutoDisable, 0);
             AddProperty("BinaryConversion", PropertyConstants.PIDX_BinaryConversion, 0);
             AddProperty("CapCompareFirmwareVersion", PropertyConstants.PIDX_CapCompareFirmwareVersion, 0);
@@ -45,79 +120,12 @@ namespace Upos.ServiceObject.Base.Properties
             AddProperty("State", PropertyConstants.PIDX_State, ServiceStateConstants.OPOS_S_CLOSED);
         }
 
-        public int GetIntProperty(int propertyIndex)
+        private void AddGenericValidators()
         {
-            return (int)_propDictionary[propertyIndex].Value;
+            SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, new DeviceClaimedBooleanValidator(this));
         }
 
-        public void SetIntProperty(int propertyIndex, int propertyValue)
-        {
-            SetProperty(propertyIndex, propertyValue);
-        }
-
-        public string GetStringProperty(int propertyIndex)
-        {
-            return (string)_propDictionary[propertyIndex].Value;
-        }
-
-        public void SetStringProperty(int propertyIndex, string propertyValue)
-        {
-            SetProperty(propertyIndex, propertyValue);
-        }
-
-        public void SetPropertyValidator(int propertyIndex, IPropertyValidator validatorFunc)
-        {
-            _propDictionary[propertyIndex].Validator = validatorFunc.Validate;
-        }
-
-        public void SetPropertyValidator(int propertyIndex, Func<object, ResultCodeConstants> validatorFunc)
-        {
-            _propDictionary[propertyIndex].Validator = validatorFunc;
-        }
-
-        public void AddProperty(string name, int propertyValue, object value)
-        {
-            _propDictionary.Add(propertyValue, new UposProperty(name, value));
-            SetProperty(propertyValue, value);
-        }
-
-        public void AddInputProperty(string name, int propertyIndex, object value)
-        {
-            _propDictionary.Add(propertyIndex, new InputProperty(name, new AlwaysValidPropertyValidator(), value));
-        }
-
-        public void ClearInputProperties()
-        {
-            foreach (var propDictionaryValue in _propDictionary.Values.OfType<InputProperty>())
-            {
-                propDictionaryValue.ResetValue();
-            }
-        }
-
-        private void SetProperty(int propertyIndex, object propertyValue)
-        {
-            if (_propDictionary[propertyIndex].Validator(propertyValue) == ResultCodeConstants.Success)
-            {
-                SetResultCode(ResultCodeConstants.Success);
-                _propDictionary[propertyIndex].Value = propertyValue;
-                FirePropertyChanged(_propDictionary[propertyIndex].Name);
-            }
-            else
-            {
-                SetResultCode(ResultCodeConstants.Illegal);
-            }
-        }
-
-        private void SetResultCode(ResultCodeConstants resultCode)
-        {
-            _propDictionary[PropertyConstants.PIDX_ResultCode].Value = resultCode;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public void FirePropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        protected abstract void AddDeviceSpecificProperties();
+        protected abstract void ReplaceValidators();
     }
 }

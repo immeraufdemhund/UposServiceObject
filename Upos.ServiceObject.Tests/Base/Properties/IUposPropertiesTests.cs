@@ -17,7 +17,7 @@ namespace Upos.ServiceObject.Base.Properties
         [SetUp]
         public void Setup()
         {
-            _props = new UposBaseProperties();
+            _props = new TestableUposBaseProperties();
             _props.AddProperty("FakePropertyInt", FakeIntPropertyIndex, FakeIntPropertyValue);
             _props.AddProperty("FakePropertyString", FakeStringPropertyIndex, FakeStringPropertyValue);
         }
@@ -41,15 +41,15 @@ namespace Upos.ServiceObject.Base.Properties
         [Test]
         public void WhenSettingIntValue_AndValidationFails_PropertyIsNotSet_And_ResultCodeIsSet_ToIllegal()
         {
-            _props.SetPropertyValidator(FakeIntPropertyIndex, x => (int)x > 0);
+            _props.SetPropertyValidator(FakeIntPropertyIndex, x => (int)x > 0 ? ResultCodeConstants.Success : ResultCodeConstants.Illegal);
 
-            _props.SetIntProperty(FakeIntPropertyIndex, -1);
+            var resultCode = _props.SetIntProperty(FakeIntPropertyIndex, -1);
 
             _props.GetIntProperty(FakeIntPropertyIndex)
                 .Should()
                 .Be(FakeIntPropertyValue, "because the value should not have been set");
 
-            _props.ByName.ResultCode
+            resultCode
                 .Should()
                 .Be(ResultCodeConstants.Illegal,
                     "because when setting an illegal value to a property, the result code is set to Illegal");
@@ -58,15 +58,15 @@ namespace Upos.ServiceObject.Base.Properties
         [Test]
         public void WhenSettingStringValue_AndValidationFails_PropertyIsNotSet_And_ResultCodeIsSet_ToIllegal()
         {
-            _props.SetPropertyValidator(FakeStringPropertyIndex, x => ((string)x).Length > 0);
+            _props.SetPropertyValidator(FakeStringPropertyIndex, x => ((string)x).Length > 0 ? ResultCodeConstants.Success : ResultCodeConstants.Illegal);
 
-            _props.SetStringProperty(FakeStringPropertyIndex, "");
+            var resultsCode = _props.SetStringProperty(FakeStringPropertyIndex, "");
 
             _props.GetStringProperty(FakeStringPropertyIndex)
                 .Should()
                 .Be(FakeStringPropertyValue, "because the value should not have been set");
 
-            _props.ByName.ResultCode
+            resultsCode
                 .Should()
                 .Be(ResultCodeConstants.Illegal,
                     "because when setting an illegal value to a property, the result code is set to Illegal");
@@ -140,7 +140,6 @@ namespace Upos.ServiceObject.Base.Properties
             CompareSetValue(() => _props.ByName.DataCount, x => _props.ByName.DataCount = x, 0, 42, "DataCount");
             CompareSetValue(() => _props.ByName.DataEventEnabled, x => _props.ByName.DataEventEnabled = x, false, true, "DataEventEnabled");
             CompareSetValue(() => _props.ByName.DeviceDescription, x => _props.ByName.DeviceDescription = x, "[Error]", "42", "DeviceDescription");
-            CompareSetValue(() => _props.ByName.DeviceEnabled, x => _props.ByName.DeviceEnabled = x, false, true, "DeviceEnabled");
             CompareSetValue(() => _props.ByName.DeviceName, x => _props.ByName.DeviceName = x, "[Error]", "42", "DeviceName");
             CompareSetValue(() => _props.ByName.FreezeEvents, x => _props.ByName.FreezeEvents = x, false, true, "FreezeEvents");
             CompareSetValue(() => _props.ByName.OutputID, x => _props.ByName.OutputID = x, 0, 42, "OutputID");
@@ -152,6 +151,7 @@ namespace Upos.ServiceObject.Base.Properties
             CompareSetValue(() => _props.ByName.ServiceObjectVersion, x => _props.ByName.ServiceObjectVersion = x, 0, 42, "ServiceObjectVersion");
             CompareSetValue(() => _props.ByName.State, x => _props.ByName.State = x, ServiceStateConstants.OPOS_S_CLOSED, ServiceStateConstants.OPOS_S_BUSY, "State");
         }
+
         private static void CompareSetValue<T>(Func<T> getter, Action<T> setter, T defaultGet, T setValue, string propertyName)
         {
             getter().Should().Be(defaultGet, "because {0} default is {1}", propertyName, defaultGet);

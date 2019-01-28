@@ -22,13 +22,13 @@ namespace Upos.ServiceObject.Base
 
         public int CheckHealth(int Level)
         {
-            return (int)ResultCodeConstants.Illegal;
+            return SetResultCode(ResultCodeConstants.Illegal);
         }
 
         public int ClaimDevice(int Timeout)
         {
-            if (_props.ByName.Claimed) return (int) ResultCodeConstants.Success;
-            if (Timeout < -1) return (int) ResultCodeConstants.Illegal;
+            if (_props.ByName.Claimed) return SetResultCode(ResultCodeConstants.Success);
+            if (Timeout < -1) return SetResultCode(ResultCodeConstants.Illegal);
 
             try
             {
@@ -37,18 +37,18 @@ namespace Upos.ServiceObject.Base
                     if (_device.ClaimDevice(TimeSpan.FromMilliseconds(Timeout)))
                     {
                         _props.SetIntProperty(PropertyConstants.PIDX_Claimed, 1);
-                        return (int)ResultCodeConstants.Success;
+                        return SetResultCode(ResultCodeConstants.Success);
                     }
 
-                    return (int) ResultCodeConstants.Timeout;
+                    return SetResultCode(ResultCodeConstants.Timeout);
                 }
 
-                return (int)ResultCodeConstants.Illegal;
+                return SetResultCode(ResultCodeConstants.Illegal);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return (int)ResultCodeConstants.Failure;
+                return SetResultCode(ResultCodeConstants.Failure);
             }
         }
 
@@ -56,25 +56,25 @@ namespace Upos.ServiceObject.Base
         {
             ClearInputProperties();
             _eventQueue.Clear();
-            return (int) ResultCodeConstants.Success;
+            return SetResultCode(ResultCodeConstants.Success);
         }
 
         public int ClearInputProperties()
         {
             _props.ClearInputProperties();
-            return (int)ResultCodeConstants.Success;
+            return SetResultCode(ResultCodeConstants.Success);
         }
 
         public int ClearOutput()
         {
-            return (int) ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         public int CloseService()
         {
             if (_props.ByName.State == ServiceStateConstants.OPOS_S_CLOSED)
             {
-                return (int) ResultCodeConstants.Success;
+                return SetResultCode(ResultCodeConstants.Success);
             }
             if (_props.GetIntProperty(PropertyConstants.PIDX_Claimed) > 0)
             {
@@ -83,18 +83,19 @@ namespace Upos.ServiceObject.Base
 
             DestroyEventQueue();
             _props.ByName.State = ServiceStateConstants.OPOS_S_CLOSED;
-            return (int)ResultCodeConstants.Success;
+            return SetResultCode(ResultCodeConstants.Success);
         }
 
         public int COFreezeEvents(bool Freeze)
         {
-            return (int) ResultCodeConstants.Failure;
+            _props.ByName.FreezeEvents = Freeze;
+            return SetResultCode(ResultCodeConstants.Success);
         }
 
         [Obsolete("Check if this is even used, I don't see it in my other code")]
         public int GetOpenResult()
         {
-            return 999;
+            return SetResultCode(ResultCodeConstants.Deprecated);
         }
 
         public int OpenService(string deviceClass, string deviceName, object dispatchObject)
@@ -108,20 +109,20 @@ namespace Upos.ServiceObject.Base
                 if (_device.CanCommunicateWithDevice())
                 {
                     _props.ByName.State = ServiceStateConstants.OPOS_S_IDLE;
-                    return (int) ResultCodeConstants.Success;
+                    return SetResultCode(ResultCodeConstants.Success);
                 }
 
-                return (int) ResultCodeConstants.NoHardware;
+                return SetResultCode(ResultCodeConstants.NoHardware);
             }
 
-            return (int) ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         public int ReleaseDevice()
         {
             if (!_props.ByName.Claimed)
             {
-                return (int) ResultCodeConstants.Illegal;
+                return SetResultCode(ResultCodeConstants.Illegal);
             }
 
             if (_device.CanReleaseDevice())
@@ -130,29 +131,29 @@ namespace Upos.ServiceObject.Base
                 {
                     ClearInput();
                     _props.ByName.Claimed = false;
-                    return (int)ResultCodeConstants.Success;
+                    return SetResultCode(ResultCodeConstants.Success);
                 }
-                return (int)ResultCodeConstants.Failure;
+                return SetResultCode(ResultCodeConstants.Failure);
             }
 
-            return (int) ResultCodeConstants.Success;
+            return SetResultCode(ResultCodeConstants.Success);
         }
 
         #region Statistics
 
         public int ResetStatistics(string statisticsBuffer)
         {
-            return (int) ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         public int RetrieveStatistics(ref string pStatisticsBuffer)
         {
-            return (int)ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         public int UpdateStatistics(string StatisticsBuffer)
         {
-            return (int)ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         #endregion
@@ -162,12 +163,12 @@ namespace Upos.ServiceObject.Base
         public int CompareFirmwareVersion(string firmwareFileName, out int result)
         {
             result = 0;
-            return (int)ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
         public int UpdateFirmware(string FirmwareFileName)
         {
-            return (int)ResultCodeConstants.Failure;
+            return SetResultCode(ResultCodeConstants.Failure);
         }
 
 
@@ -187,19 +188,26 @@ namespace Upos.ServiceObject.Base
 
         public void SetPropertyNumber(int lPropIndex, int nNewValue)
         {
-            _props.SetIntProperty(lPropIndex, nNewValue);
+            SetResultCode(_props.SetIntProperty(lPropIndex, nNewValue));
         }
 
         public void SetPropertyString(int lPropIndex, string StringData)
         {
-            _props.SetStringProperty(lPropIndex, StringData);
+            SetResultCode(_props.SetStringProperty(lPropIndex, StringData));
         }
 
         #endregion
 
+        protected int SetResultCode(ResultCodeConstants resultCode)
+        {
+            _props.ByName.ResultCode = resultCode;
+            return (int) resultCode;
+        }
+
         public abstract int DirectIO(int command, ref int numericData, ref string stringData);
 
         protected abstract bool VerifyDeviceSettings(Dictionary<string, object> deviceSettings);
+
         protected abstract COPOS GetDeviceSpecificControlObjectDispatcher(object dispatchObject);
 
         private void DestroyEventQueue()

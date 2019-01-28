@@ -72,7 +72,9 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Base\Properties\DeviceClaimedValidatorTests.cs" />
     <Compile Include="Base\Properties\IUposPropertiesTests.cs" />
+    <Compile Include="Base\Properties\TestableUposBaseProperties.cs" />
     <Compile Include="Base\UposEvents\UposEventArgumentsTests.cs" />
     <Compile Include="Base\UposEvents\UposEventDispatcherSpy.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

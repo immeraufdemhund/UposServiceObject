@@ -1,5 +1,6 @@
 ﻿using System;
 using Upos.ServiceObject.Base;
+using Upos.ServiceObject.Base.Properties;
 using Upos.ServiceObject.CashDrawer.Interfaces;
 
 namespace Upos.ServiceObject.CashDrawer
@@ -12,6 +13,18 @@ namespace Upos.ServiceObject.CashDrawer
             : base(new CashDrawerProperties(), device)
         {
             _device = device;
+            _props.SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, ValidateDeviceEnabled);
+        }
+
+        private ResultCodeConstants ValidateDeviceEnabled(object sender)
+        {
+            if (_device.CanEnableDevice())
+            {
+                return _device.EnableDevice() ?
+                    ResultCodeConstants.Success :
+                    ResultCodeConstants.Disabled;
+            }
+            return ResultCodeConstants.Failure;
         }
 
         public int OpenDrawer()
@@ -20,7 +33,7 @@ namespace Upos.ServiceObject.CashDrawer
             try
             {
                 _device.OpenDrawer();
-                if(_device.CanReportStatus)
+                if (_device.CanReportStatus)
                 {
                     //var opened = _device.GetStatus();
                     //if (openend) {
@@ -28,12 +41,12 @@ namespace Upos.ServiceObject.CashDrawer
                     //_dispatcher.SendStatusUpdate(opened); }
                 }
 
-                return (int)ResultCodeConstants.Success;
+                return SetResultCode(ResultCodeConstants.Success);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return (int)ResultCodeConstants.Failure; //TODO get error codes
+                return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
             }
         }
 
@@ -51,12 +64,12 @@ namespace Upos.ServiceObject.CashDrawer
                     //_dispatcher.SendStatusUpdate(closed); }
                 }
 
-                return (int)ResultCodeConstants.Success;
+                return SetResultCode(ResultCodeConstants.Success);
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return (int)ResultCodeConstants.Failure; //TODO get error codes
+                return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
             }
         }
 

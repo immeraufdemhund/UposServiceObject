@@ -10,7 +10,7 @@ namespace Upos.ServiceObject.Base.UposEvents
         public void FixtureSetup()
         {
             _spy = new UposEventDispatcherSpy();
-            _uposProperties = new UposBaseProperties();
+            _uposProperties = new TestableUposBaseProperties();
             _uposEventArguments = new UposEventArguments(_uposProperties);
             _dispatcher = IUposEventDispatcherFactory.Create(_uposEventArguments);
         }
