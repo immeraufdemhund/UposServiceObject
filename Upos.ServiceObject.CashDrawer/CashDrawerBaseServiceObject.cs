@@ -7,25 +7,8 @@ namespace Upos.ServiceObject.CashDrawer
 {
     public abstract class CashDrawerBaseServiceObject : UposBase, ICashDrawer
     {
-        private readonly ICashDrawerDevice _device;
-
-        protected CashDrawerBaseServiceObject(ICashDrawerDevice device)
-            : base(new CashDrawerProperties(), device)
-        {
-            _device = device;
-            _props.SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, ValidateDeviceEnabled);
-        }
-
-        private ResultCodeConstants ValidateDeviceEnabled(object sender)
-        {
-            if (_device.CanEnableDevice())
-            {
-                return _device.EnableDevice() ?
-                    ResultCodeConstants.Success :
-                    ResultCodeConstants.Disabled;
-            }
-            return ResultCodeConstants.Failure;
-        }
+        private ICashDrawerDevice _device;
+        protected ICashDrawerProperties _props;
 
         public int OpenDrawer()
         {
@@ -77,5 +60,34 @@ namespace Upos.ServiceObject.CashDrawer
         {
             return new CashDrawerControlObject(dispatchObject);
         }
+
+        protected override IUposProperties GetDeviceSpecifcUposProperties()
+        {
+            var properties = new CashDrawerProperties();
+            properties.SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, ValidateDeviceEnabled);
+            _props = properties;
+            return properties;
+        }
+
+        protected override IUposDevice GetDevice()
+        {
+            _device = GetCashDrawerDevice();
+            return _device;
+        }
+
+        protected override int GetImplementingVersion() => 1 * 1000000 + 9 * 1000 + 0;
+
+        private ResultCodeConstants ValidateDeviceEnabled(object sender)
+        {
+            if (_device.CanEnableDevice())
+            {
+                return _device.EnableDevice() ?
+                    ResultCodeConstants.Success :
+                    ResultCodeConstants.Disabled;
+            }
+            return ResultCodeConstants.Failure;
+        }
+
+        protected abstract ICashDrawerDevice GetCashDrawerDevice();
     }
 }

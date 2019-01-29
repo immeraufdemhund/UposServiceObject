@@ -8,17 +8,12 @@ namespace Upos.ServiceObject.Base
     public abstract class UposBase : IUposBase
     {
         private EventThreadHelper _eventQueue;
+        private IUposDevice _device;
+        private IUposProperties _props;
+        private OpenResultConstants _openResult;
+
         protected string OpenServiceDeviceClass = "";
         protected string OpenServiceDeviceName = "";
-
-        protected readonly IUposProperties _props;
-        private readonly IUposDevice _device;
-
-        protected UposBase(IUposProperties props, IUposDevice device)
-        {
-            _props = props;
-            _device = device;
-        }
 
         public int CheckHealth(int Level)
         {
@@ -83,6 +78,7 @@ namespace Upos.ServiceObject.Base
 
             DestroyEventQueue();
             _props.ByName.State = ServiceStateConstants.OPOS_S_CLOSED;
+            _device = null;
             return SetResultCode(ResultCodeConstants.Success);
         }
 
@@ -92,28 +88,38 @@ namespace Upos.ServiceObject.Base
             return SetResultCode(ResultCodeConstants.Success);
         }
 
-        [Obsolete("Check if this is even used, I don't see it in my other code")]
-        public int GetOpenResult()
-        {
-            return SetResultCode(ResultCodeConstants.Deprecated);
-        }
+        public int GetOpenResult() => (int)_openResult;
 
         public int OpenService(string deviceClass, string deviceName, object dispatchObject)
         {
+            OpenServiceDeviceClass = deviceClass;
+            OpenServiceDeviceName = deviceName;
+
+            if (_props == null)
+                _props = GetDeviceSpecifcUposProperties();
+
             _eventQueue = new EventThreadHelper(GetDeviceSpecificControlObjectDispatcher(dispatchObject), _props);
             var registryValues = RegistryHelper.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
             if (VerifyDeviceSettings(registryValues))
             {
-                OpenServiceDeviceClass = deviceClass;
-                OpenServiceDeviceName = deviceName;
-                if (_device.CanCommunicateWithDevice())
+                _device = GetDevice();
+                _openResult = _device.CanCommunicateWithDevice(deviceClass, deviceName, registryValues);
+                if (_openResult == OpenResultConstants.OPOS_SUCCESS)
                 {
+                    _props.ByName.Claimed = false;
+                    _props.ByName.DeviceEnabled = false;
+                    _props.ByName.DataEventEnabled = false;
+                    _props.ByName.FreezeEvents = false;
                     _props.ByName.State = ServiceStateConstants.OPOS_S_IDLE;
+                    _props.ByName.DeviceDescription = GetDeviceDescription();
+                    _props.ByName.ServiceObjectVersion = GetImplementingVersion();
                     return SetResultCode(ResultCodeConstants.Success);
                 }
 
                 return SetResultCode(ResultCodeConstants.NoHardware);
             }
+
+            _openResult = OpenResultConstants.OPOS_ORS_CONFIG;
 
             return SetResultCode(ResultCodeConstants.Failure);
         }
@@ -204,6 +210,14 @@ namespace Upos.ServiceObject.Base
             return (int) resultCode;
         }
 
+        protected abstract IUposDevice GetDevice();
+
+        protected abstract IUposProperties GetDeviceSpecifcUposProperties();
+
+        protected abstract string GetDeviceDescription();
+
+        protected abstract int GetImplementingVersion();
+
         public abstract int DirectIO(int command, ref int numericData, ref string stringData);
 
         protected abstract bool VerifyDeviceSettings(Dictionary<string, object> deviceSettings);
@@ -221,18 +235,5 @@ namespace Upos.ServiceObject.Base
                 _eventQueue = null;
             }
         }
-    }
-
-    public interface IUposDevice
-    {
-        bool CanCommunicateWithDevice();
-        bool CanClaimDevice();
-        bool CanReleaseDevice();
-        bool CanEnableDevice();
-        bool CanDisableDevice();
-        bool ClaimDevice(TimeSpan timeout);
-        bool ReleaseDevice();
-        bool EnableDevice();
-        bool DisableDevice();
     }
 }

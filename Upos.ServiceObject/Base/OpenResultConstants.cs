@@ -3,6 +3,8 @@ namespace Upos.ServiceObject.Base
 {
     public enum OpenResultConstants
     {
+        OPOS_SUCCESS = 0,
+
         /// <summary>
         /// The Service Object tried to access an I/O port (for
         /// example, an RS232 port) during Open processing, but

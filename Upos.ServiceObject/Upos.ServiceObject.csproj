@@ -50,6 +50,7 @@
     <Compile Include="Base\ErrorLocusConstants.cs" />
     <Compile Include="Base\ErrorResponseConstants.cs" />
     <Compile Include="Base\IUposBase.cs" />
+    <Compile Include="Base\IUposDevice.cs" />
     <Compile Include="Base\OpenResultConstants.cs" />
     <Compile Include="Base\Properties\INamedUposBaseProperties.cs" />
     <Compile Include="Base\Properties\IUposProperties.cs" />

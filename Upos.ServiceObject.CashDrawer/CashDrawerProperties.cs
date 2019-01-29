@@ -3,13 +3,19 @@ using Upos.ServiceObject.Base.Properties.Validators;
 
 namespace Upos.ServiceObject.CashDrawer
 {
-    public class CashDrawerProperties : UposBaseProperties
+    public interface ICashDrawerProperties : IUposProperties
+    {
+        new INamedCashDrawerProperties ByName { get; }
+    }
+    public class CashDrawerProperties : UposBaseProperties, ICashDrawerProperties
     {
         private const int PIDX_CASH = 1000;
 
         public const int PIDXCash_CapStatus = PIDX_CASH + PIDX_NUMBER + 501;
         public const int PIDXCash_CapStatusMultiDrawerDetect = PIDX_CASH + PIDX_NUMBER + 502;
         public const int PIDXCash_DrawerOpened = PIDX_CASH + PIDX_NUMBER + 1;
+
+        INamedCashDrawerProperties ICashDrawerProperties.ByName => new NamedCashDrawerProperties(this);
 
         protected override void AddDeviceSpecificProperties()
         {

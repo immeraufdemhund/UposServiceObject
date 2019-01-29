@@ -41,6 +41,7 @@
     <Compile Include="CashDrawerControlObject.cs" />
     <Compile Include="CashDrawerProperties.cs" />
     <Compile Include="ICashDrawerDevice.cs" />
+    <Compile Include="INamedCashDrawerProperties.cs" />
     <Compile Include="Interfaces\COPOSCashDrawer.cs" />
     <Compile Include="Interfaces\ICashDrawer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
