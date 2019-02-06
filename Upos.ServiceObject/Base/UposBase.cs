@@ -7,6 +7,8 @@ namespace Upos.ServiceObject.Base
 {
     public abstract class UposBase : IUposBase
     {
+        public IReadWindowsUposRegistry WindowsUposRegistry { get; set; } = new RegistryHelper();
+
         private EventThreadHelper _eventQueue;
         private IUposDevice _device;
         private IUposProperties _props;
@@ -99,7 +101,7 @@ namespace Upos.ServiceObject.Base
                 _props = GetDeviceSpecifcUposProperties();
 
             _eventQueue = new EventThreadHelper(GetDeviceSpecificControlObjectDispatcher(dispatchObject), _props);
-            var registryValues = RegistryHelper.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
+            var registryValues = WindowsUposRegistry.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
             if (VerifyDeviceSettings(registryValues))
             {
                 _device = GetDevice();

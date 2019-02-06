@@ -1,13 +1,16 @@
-﻿using System;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System.Collections.Generic;
 
 namespace Upos.ServiceObject
 {
-    [Obsolete("I don't like this")]
-    public static class RegistryHelper
+    public interface IReadWindowsUposRegistry
     {
-        public static Dictionary<string, object> GetRegistryValues(string deviceClass, string deviceName)
+        Dictionary<string, object> GetRegistryValues(string deviceClass, string deviceName);
+    }
+
+    public class RegistryHelper : IReadWindowsUposRegistry
+    {
+        public Dictionary<string, object> GetRegistryValues(string deviceClass, string deviceName)
         {
             var dict = new Dictionary<string, object>();
             string regBaseName = $@"SOFTWARE\OLEforRetail\ServiceOPOS\{deviceClass}";

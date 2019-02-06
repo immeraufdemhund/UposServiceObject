@@ -1,6 +1,9 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 
 namespace Upos.ServiceObject.Base.Properties
 {
@@ -75,54 +78,42 @@ namespace Upos.ServiceObject.Base.Properties
         [Test]
         public void WhenSettingValue_PropertyChangedEvent_IsFired()
         {
-            _props.MonitorEvents();
-            _props.ByName.AutoDisable = true;
-            _props.ByName.BinaryConversion = 1;
-            _props.ByName.CapCompareFirmwareVersion = true;
-            _props.ByName.CapPowerReporting = 1;
-            _props.ByName.CapStatisticsReporting = true;
-            _props.ByName.CapUpdateFirmware = true;
-            _props.ByName.CapUpdateStatistics = true;
-            _props.ByName.CheckHealthText = "HEALTHY";
-            _props.ByName.Claimed = true;
-            _props.ByName.DataCount = 1;
-            _props.ByName.DataEventEnabled = true;
-            _props.ByName.DeviceDescription = "ServiceObject";
-            _props.ByName.DeviceEnabled = true;
-            _props.ByName.DeviceName = "Name";
-            _props.ByName.FreezeEvents = true;
-            _props.ByName.OutputID = 1;
-            _props.ByName.PowerNotify = 1;
-            _props.ByName.PowerState = 1;
-            _props.ByName.ResultCode = ResultCodeConstants.Busy;
-            _props.ByName.ResultCodeExtended = 1;
-            _props.ByName.ServiceObjectDescription = "SO Description";
-            _props.ByName.ServiceObjectVersion = 1;
-            _props.ByName.State = ServiceStateConstants.OPOS_S_BUSY;
+            var propertiesNotifiedAbout = new List<string>();
+            _props.PropertyChanged += (sender, args) => propertiesNotifiedAbout.Add(args.PropertyName);
+            var listOfProperties = _props.ByName.GetType().GetProperties().Select(x => x.Name).ToList();
+            var propertiesToUpdate = new List<Action<INamedUposBaseProperties>>
+            {
+                namedProperty => namedProperty.AutoDisable = true,
+                namedProperty => namedProperty.BinaryConversion = 1,
+                namedProperty => namedProperty.CapCompareFirmwareVersion = true,
+                namedProperty => namedProperty.CapPowerReporting = 1,
+                namedProperty => namedProperty.CapStatisticsReporting = true,
+                namedProperty => namedProperty.CapUpdateFirmware = true,
+                namedProperty => namedProperty.CapUpdateStatistics = true,
+                namedProperty => namedProperty.CheckHealthText = "HEALTHY",
+                namedProperty => namedProperty.Claimed = true,
+                namedProperty => namedProperty.DataCount = 1,
+                namedProperty => namedProperty.DataEventEnabled = true,
+                namedProperty => namedProperty.DeviceDescription = "ServiceObject",
+                namedProperty => namedProperty.DeviceEnabled = true,
+                namedProperty => namedProperty.DeviceName = "Name",
+                namedProperty => namedProperty.FreezeEvents = true,
+                namedProperty => namedProperty.OutputID = 1,
+                namedProperty => namedProperty.PowerNotify = 1,
+                namedProperty => namedProperty.PowerState = 1,
+                namedProperty => namedProperty.ResultCode = ResultCodeConstants.Busy,
+                namedProperty => namedProperty.ResultCodeExtended = 1,
+                namedProperty => namedProperty.ServiceObjectDescription = "SO Description",
+                namedProperty => namedProperty.ServiceObjectVersion = 1,
+                namedProperty => namedProperty.State = ServiceStateConstants.OPOS_S_BUSY
+            };
 
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.AutoDisable);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.BinaryConversion);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapCompareFirmwareVersion);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapPowerReporting);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapStatisticsReporting);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapUpdateFirmware);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CapUpdateStatistics);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.CheckHealthText);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.Claimed);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.DataCount);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.DataEventEnabled);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.DeviceDescription);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.DeviceEnabled);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.DeviceName);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.FreezeEvents);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.OutputID);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.PowerNotify);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.PowerState);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.ResultCode);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.ResultCodeExtended);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.ServiceObjectDescription);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.ServiceObjectVersion);
-            _props.ShouldRaisePropertyChangeFor(x => x.ByName.State);
+            foreach (var action in propertiesToUpdate)
+            {
+                action(_props.ByName);
+            }
+
+            propertiesNotifiedAbout.Should().BeEquivalentTo(listOfProperties);
         }
 
         [Test]

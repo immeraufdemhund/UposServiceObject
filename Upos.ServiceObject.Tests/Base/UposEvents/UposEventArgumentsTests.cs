@@ -6,7 +6,7 @@ namespace Upos.ServiceObject.Base.UposEvents
     [TestFixture]
     public class UposEventArgumentsTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetup()
         {
             _spy = new UposEventDispatcherSpy();
