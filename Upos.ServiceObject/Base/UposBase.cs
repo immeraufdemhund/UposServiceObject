@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 using Upos.ServiceObject.Base.Properties;
 using Upos.ServiceObject.Base.UposEvents;
 
@@ -7,6 +8,8 @@ namespace Upos.ServiceObject.Base
 {
     public abstract class UposBase : IUposBase
     {
+        private static readonly ILog Log = LogManager.GetLogger(typeof(UposBase));
+
         public IReadWindowsUposRegistry WindowsUposRegistry { get; set; } = new RegistryHelper();
 
         private EventThreadHelper _eventQueue;
@@ -94,13 +97,17 @@ namespace Upos.ServiceObject.Base
 
         public int OpenService(string deviceClass, string deviceName, object dispatchObject)
         {
+            Log.DebugFormat("OpeningService for deviceClass {0} called {1}", deviceClass, deviceName);
             OpenServiceDeviceClass = deviceClass;
             OpenServiceDeviceName = deviceName;
 
             if (_props == null)
                 _props = GetDeviceSpecifcUposProperties();
 
+            Log.Debug("Creating EventDispatcher");
             _eventQueue = new EventThreadHelper(GetDeviceSpecificControlObjectDispatcher(dispatchObject), _props);
+
+            Log.Debug("Getting configuration options from Registry");
             var registryValues = WindowsUposRegistry.GetRegistryValues(OpenServiceDeviceClass, OpenServiceDeviceName);
             if (VerifyDeviceSettings(registryValues))
             {
@@ -108,6 +115,7 @@ namespace Upos.ServiceObject.Base
                 _openResult = _device.CanCommunicateWithDevice(deviceClass, deviceName, registryValues);
                 if (_openResult == OpenResultConstants.OPOS_SUCCESS)
                 {
+                    Log.Debug("Communication with device succeeded, Opening service is successful");
                     _props.ByName.Claimed = false;
                     _props.ByName.DeviceEnabled = false;
                     _props.ByName.DataEventEnabled = false;
@@ -117,10 +125,11 @@ namespace Upos.ServiceObject.Base
                     _props.ByName.ServiceObjectVersion = GetImplementingVersion();
                     return SetResultCode(ResultCodeConstants.Success);
                 }
+                Log.Error("Device Specific check for communicating with device failed. Check configuration values to verify proper values are set to be able to communicate with device");
 
                 return SetResultCode(ResultCodeConstants.NoHardware);
             }
-
+            Log.Error("Device Specific validation of configuration options failed. Please verify that all settings are correct and in proper location in Windows registry");
             _openResult = OpenResultConstants.OPOS_ORS_CONFIG;
 
             return SetResultCode(ResultCodeConstants.Failure);
