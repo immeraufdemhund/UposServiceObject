@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using Upos.ServiceObject.Base;
 using Upos.ServiceObject.Base.Properties;
 using Upos.ServiceObject.CashDrawer.Interfaces;
@@ -7,15 +8,20 @@ namespace Upos.ServiceObject.CashDrawer
 {
     public abstract class CashDrawerBaseServiceObject : UposBase, ICashDrawer
     {
+        private static ILog Log = LogManager.GetLogger(typeof(CashDrawerBaseServiceObject));
+
         private ICashDrawerDevice _device;
         protected ICashDrawerProperties _props;
 
         public int OpenDrawer()
         {
+            Log.Debug("Attempting to open cash drawer");
             //Assert Drawer Enabled
             try
             {
                 _device.OpenDrawer();
+                Log.Debug("Drawer Opened");
+                _props.ByName.DrawerOpened = true;
                 if (_device.CanReportStatus)
                 {
                     //var opened = _device.GetStatus();
@@ -28,7 +34,7 @@ namespace Upos.ServiceObject.CashDrawer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error("Error opening CashDrawer", e);
                 return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
             }
         }
@@ -39,6 +45,7 @@ namespace Upos.ServiceObject.CashDrawer
             try
             {
                 _device.WaitForDrawerClose();
+                _props.ByName.DrawerOpened = false;
                 if (_device.CanReportStatus)
                 {
                     //var opened = _device.GetStatus();
@@ -51,7 +58,7 @@ namespace Upos.ServiceObject.CashDrawer
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Log.Error("Error waiting for drawer to close", e);
                 return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
             }
         }
