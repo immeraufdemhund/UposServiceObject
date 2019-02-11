@@ -85,7 +85,7 @@
     <Compile Include="Base\Properties\TestableUposBaseProperties.cs" />
     <Compile Include="Base\UposEvents\UposEventArgumentsTests.cs" />
     <Compile Include="Base\UposEvents\UposEventDispatcherSpy.cs" />
-    <Compile Include="CashDrawer\PropertyValidators\CashDrawerDeviceEnabledValidatorTetsts.cs" />
+    <Compile Include="CashDrawer\PropertyValidators\CashDrawerDeviceEnabledValidatorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

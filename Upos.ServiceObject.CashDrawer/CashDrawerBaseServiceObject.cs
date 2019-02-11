@@ -3,6 +3,7 @@ using log4net;
 using Upos.ServiceObject.Base;
 using Upos.ServiceObject.Base.Properties;
 using Upos.ServiceObject.CashDrawer.Interfaces;
+using Upos.ServiceObject.CashDrawer.PropertyValidators;
 
 namespace Upos.ServiceObject.CashDrawer
 {
@@ -16,7 +17,9 @@ namespace Upos.ServiceObject.CashDrawer
         public int OpenDrawer()
         {
             Log.Debug("Attempting to open cash drawer");
-            //Assert Drawer Enabled
+            if (!_props.ByName.DeviceEnabled)
+                return SetResultCode(ResultCodeConstants.Disabled);
+
             try
             {
                 _device.OpenDrawer();
@@ -71,7 +74,6 @@ namespace Upos.ServiceObject.CashDrawer
         protected override IUposProperties GetDeviceSpecifcUposProperties()
         {
             var properties = new CashDrawerProperties();
-            properties.SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, ValidateDeviceEnabled);
             _props = properties;
             return properties;
         }
@@ -79,21 +81,13 @@ namespace Upos.ServiceObject.CashDrawer
         protected override IUposDevice GetDevice()
         {
             _device = GetCashDrawerDevice();
+            var cashDrawerDeviceEnabledPropertyValidator = new CashDrawerDeviceEnabledPropertyValidator(_props, _device);
+            _props.SetPropertyValidator(PropertyConstants.PIDX_DeviceEnabled, cashDrawerDeviceEnabledPropertyValidator);
+
             return _device;
         }
 
         protected override int GetImplementingVersion() => 1 * 1000000 + 9 * 1000 + 0;
-
-        private ResultCodeConstants ValidateDeviceEnabled(object sender)
-        {
-            if (_device.CanEnableDevice())
-            {
-                return _device.EnableDevice() ?
-                    ResultCodeConstants.Success :
-                    ResultCodeConstants.Disabled;
-            }
-            return ResultCodeConstants.Failure;
-        }
 
         protected abstract ICashDrawerDevice GetCashDrawerDevice();
     }
