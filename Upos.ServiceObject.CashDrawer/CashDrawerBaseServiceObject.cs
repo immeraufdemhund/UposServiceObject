@@ -2,6 +2,7 @@
 using log4net;
 using Upos.ServiceObject.Base;
 using Upos.ServiceObject.Base.Properties;
+using Upos.ServiceObject.Base.UposEvents;
 using Upos.ServiceObject.CashDrawer.Interfaces;
 using Upos.ServiceObject.CashDrawer.PropertyValidators;
 
@@ -23,46 +24,30 @@ namespace Upos.ServiceObject.CashDrawer
             try
             {
                 _device.OpenDrawer();
-                Log.Debug("Drawer Opened");
-                _props.ByName.DrawerOpened = true;
-                if (_device.CanReportStatus)
-                {
-                    //var opened = _device.GetStatus();
-                    //if (openend) {
-                    var opened = new StatusEvents.CashDrawerOpened();
-                    //_dispatcher.SendStatusUpdate(opened); }
-                }
-
                 return SetResultCode(ResultCodeConstants.Success);
             }
             catch (Exception e)
             {
                 Log.Error("Error opening CashDrawer", e);
-                return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
+                return SetResultCode(ResultCodeConstants.Failure);
             }
         }
 
         public int WaitForDrawerClose(int beepTimeout, int beepFrequency, int beepDuration, int beepDelay)
         {
-            //Assert Drawer Enabled
+            Log.Debug("Waiting for cash drawer to be closed");
+            if (!_props.ByName.DeviceEnabled)
+                return SetResultCode(ResultCodeConstants.Disabled);
+
             try
             {
                 _device.WaitForDrawerClose();
-                _props.ByName.DrawerOpened = false;
-                if (_device.CanReportStatus)
-                {
-                    //var opened = _device.GetStatus();
-                    //if (closed) {
-                    var closed = new StatusEvents.CashDrawerClosed();
-                    //_dispatcher.SendStatusUpdate(closed); }
-                }
-
                 return SetResultCode(ResultCodeConstants.Success);
             }
             catch (Exception e)
             {
                 Log.Error("Error waiting for drawer to close", e);
-                return SetResultCode(ResultCodeConstants.Failure); //TODO get error codes
+                return SetResultCode(ResultCodeConstants.Failure);
             }
         }
 
@@ -75,7 +60,21 @@ namespace Upos.ServiceObject.CashDrawer
         {
             var properties = new CashDrawerProperties();
             _props = properties;
+            _props.PropertyChanged += _props_PropertyChanged;
             return properties;
+        }
+
+        private void _props_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == CashDrawerProperties.DrawerOpenedPropertyName)
+            {
+                if (!_device.CanReportStatus) return;
+                var newStatus = _props.ByName.DrawerOpened ?
+                     (StatusUpdateEventArguments)new StatusEvents.CashDrawerOpened() :
+                     (StatusUpdateEventArguments)new StatusEvents.CashDrawerClosed();
+
+                EnqueueEvent(newStatus);
+            }
         }
 
         protected override IUposDevice GetDevice()

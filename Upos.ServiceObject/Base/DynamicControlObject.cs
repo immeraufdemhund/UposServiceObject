@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 
 namespace Upos.ServiceObject.Base
 {
@@ -8,6 +9,8 @@ namespace Upos.ServiceObject.Base
     /// </summary>
     public abstract class DynamicControlObject : COPOS
     {
+        private static ILog _log = LogManager.GetLogger(typeof(DynamicControlObject));
+
         public void SOData(int Status)
         {
             try
@@ -16,6 +19,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error firing Data event", ex);
             }
         }
 
@@ -27,6 +31,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error firing DirectIO event", ex);
             }
         }
 
@@ -38,6 +43,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error firing Error event", ex);
             }
         }
 
@@ -49,6 +55,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error output complete event", ex);
             }
         }
 
@@ -60,6 +67,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error status updated event", ex);
             }
         }
 
@@ -71,6 +79,7 @@ namespace Upos.ServiceObject.Base
             }
             catch (Exception ex)
             {
+                _log.Error("Error getting process id", ex);
                 pProcessID = -1;
             }
         }

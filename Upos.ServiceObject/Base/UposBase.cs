@@ -235,6 +235,11 @@ namespace Upos.ServiceObject.Base
 
         protected abstract COPOS GetDeviceSpecificControlObjectDispatcher(object dispatchObject);
 
+        protected void EnqueueEvent(EventArguments dataEvent)
+        {
+            _eventQueue.EnqueueEvent(dataEvent);
+        }
+
         private void DestroyEventQueue()
         {
             try
