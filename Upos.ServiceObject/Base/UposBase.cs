@@ -76,13 +76,20 @@ namespace Upos.ServiceObject.Base
             {
                 return SetResultCode(ResultCodeConstants.Success);
             }
-            if (_props.GetIntProperty(PropertyConstants.PIDX_Claimed) > 0)
+
+            if (_props.ByName.DeviceEnabled)
+            {
+                _props.ByName.DeviceEnabled = false;
+            }
+
+            if (_props.ByName.Claimed)
             {
                 ReleaseDevice();
             }
 
             DestroyEventQueue();
             _props.ByName.State = ServiceStateConstants.OPOS_S_CLOSED;
+            _device.Dispose();
             _device = null;
             return SetResultCode(ResultCodeConstants.Success);
         }

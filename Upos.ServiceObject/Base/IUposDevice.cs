@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Upos.ServiceObject.Base
 {
-    public interface IUposDevice
+    public interface IUposDevice : IDisposable
     {
         OpenResultConstants CanCommunicateWithDevice(string deviceClass, string deviceName, Dictionary<string, object> registryValues);
         bool CanClaimDevice();
