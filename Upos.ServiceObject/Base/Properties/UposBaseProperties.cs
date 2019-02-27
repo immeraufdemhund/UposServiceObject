@@ -76,7 +76,7 @@ namespace Upos.ServiceObject.Base.Properties
 
         private ResultCodeConstants SetProperty(int propertyIndex, object propertyValue)
         {
-            if (_propDictionary[propertyIndex].Value == propertyValue) return ResultCodeConstants.Success;
+            if (_propDictionary[propertyIndex].Value.Equals(propertyValue)) return ResultCodeConstants.Success;
 
             if (_propDictionary[propertyIndex].Validator(propertyValue) == ResultCodeConstants.Success)
             {
